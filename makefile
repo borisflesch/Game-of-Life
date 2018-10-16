@@ -7,7 +7,7 @@ BDIR = bin
 SDIR = src
 
 # Flags compilateur
-CFLAGS = -I$(IDIR) -Wall
+CFLAGS = -I$(IDIR) -Wall -g
 # OBJECTS = $(SOURCES:src/%.c=%.o)
 
 vpath %.h $(IDIR)

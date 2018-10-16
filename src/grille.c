@@ -1,5 +1,24 @@
 #include "grille.h"
 
+void alloue_grille (int l, int c, grille* g){
+	//g = (grille) malloc(sizeof(grille));
+	int i, j;
+	g->nbl = l;
+	g->nbc = c;
+	g->cellules = (int**) malloc(l * sizeof(int*));
+
+	for (i = 0; i < c; i++) {
+		g->cellules[i] = (int*) malloc(c * sizeof(int));
+		for (j = 0; j < c; j++) {
+			set_morte(i, j, *g);
+		}
+	}
+}
+
+void libere_grille (grille* g){
+	free(g);
+}
+
 void init_grille_from_file (char * filename, grille* g){
 	FILE * pfile = NULL;
 	pfile = fopen(filename, "r");
