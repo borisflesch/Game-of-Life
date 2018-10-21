@@ -23,7 +23,7 @@ void affiche_grille (grille g){
 		affiche_ligne(c, g.cellules[i]);
 		affiche_trait(c);
 	}	
-	printf("\n"); 
+	printf("\n");
 	return;
 }
 
@@ -41,6 +41,21 @@ void debut_jeu(grille *g, grille *gc){
 				evolue(g,gc);
 				efface_grille(*g);
 				affiche_grille(*g);
+				break;
+			}
+			case 'n' :
+			{ // touche 'n' pour charger dynamiquement une nouvelle grille
+				char nGrille[255];
+				// efface_grille(*g);
+				printf("Merci d'indiquer le chemin vers la nouvelle grille à charger : ");
+				scanf("%s", nGrille);
+				printf("\n\n");
+				init_grille_from_file(nGrille, g);
+				alloue_grille (g->nbl, g->nbc, gc);
+				affiche_grille(*g);
+				printf("\n\n");
+				
+				debut_jeu(g, gc);
 				break;
 			}
 			default : 
