@@ -6,10 +6,10 @@ Ce [dépôt](https://git.unistra.fr/bflesch/Projet-Game-of-Life) contient l'int�
 Structure des fichiers
 ----------------------
 
-/ racine
--- src/ contient toutes les sources (*.c)
--- include/ contient toutes les en-têtes de fonctions et structures du programme (*.h)
--- grilles/ contient l'ensemble des grilles disponibles
+/ racine\
+-- src/ contient toutes les sources (*.c)\
+-- include/ contient toutes les en-têtes de fonctions et structures du programme (*.h)\
+-- grilles/ contient l'ensemble des grilles disponibles\
 
 Commandes importantes
 ---------------------
@@ -48,5 +48,5 @@ make clean
 
 Journal des versions
 --------------------
-v0.0.0 : Commit initial, fichiers de départs uniquement
+v0.0.0 : Commit initial, fichiers de départs uniquement\
 v0.1 : Premier niveau terminé
