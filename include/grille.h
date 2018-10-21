@@ -9,7 +9,7 @@
 #include <assert.h>
 
 /**
- * \struct grille :
+ * @struct grille :
  * nbl : nombre de lignes
  * nbc : nombre de colonnes
  * cellules : tableau de tableau de cellules
