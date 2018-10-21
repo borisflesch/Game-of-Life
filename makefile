@@ -24,8 +24,9 @@ main: main.o jeu.o io.o grille.o
 
 dist:
 	@mkdir -p dist
-	tar -J -cvf dist/projet.tar.xz grilles include src makefile
+	tar -J -cvf dist/projet.tar.xz grilles include src makefile Doxyfile
 
 clean:
 	rm -f $(ODIR)/*.o
 	rm -f $(BDIR)/*
+	rm -rf doc/
