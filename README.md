@@ -48,5 +48,5 @@ make clean
 
 Journal des versions
 --------------------
-v0.0.0 : Commit initial, fichiers de départs uniquement\
+v0.0.0 : Commit initial, fichiers de départs uniquement\ 
 v0.1 : Premier niveau terminé
