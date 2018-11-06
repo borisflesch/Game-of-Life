@@ -55,13 +55,16 @@ void debut_jeu(grille *g, grille *gc, int *tempsEvolution){
 				printf("Merci d'indiquer le chemin vers la nouvelle grille à charger : ");
 				scanf("%s", nGrille);
 				// efface_grille(*g);
-				// printf("\n\n");
+				printf("\n");
+				printf("> Comptage par défaut en mode Cyclique\n");
 
 				(*tempsEvolution) = 0; // Réinitialisation du temps
 				init_grille_from_file(nGrille, g);
 				alloue_grille (g->nbl, g->nbc, gc);
 				affiche_grille(*g, tempsEvolution);
-				printf("\n");
+				// printf("\n\e[2A");
+				printf("\n\e[2A");
+				printf("\n\n");
 				
 				debut_jeu(g, gc, tempsEvolution);
 				break;
