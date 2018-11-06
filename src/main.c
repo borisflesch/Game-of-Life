@@ -5,6 +5,7 @@
 #include "jeu.h"
 
 int main (int argc, char ** argv) {
+	int tempsEvolution = 1; // Début du jeu <=> temps 1
 	
 	if (argc != 2 )
 	{
@@ -12,17 +13,13 @@ int main (int argc, char ** argv) {
 		return 1;
 	}
 
-	int t[5] = {1, 0, 0, 1, 0};
-	affiche_ligne(5, t);
-
-	return 0;
-
 	grille g, gc;
+
 	init_grille_from_file(argv[1],&g);
 	alloue_grille (g.nbl, g.nbc, &gc);
-	affiche_grille(g);
+	affiche_grille(g, &tempsEvolution);
 	
-	debut_jeu(&g, &gc);
+	debut_jeu(&g, &gc, &tempsEvolution);
 
 	libere_grille(&g);
 	libere_grille(&gc);

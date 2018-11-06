@@ -15,9 +15,10 @@ void affiche_ligne (int c, int* ligne){
 	return;
 }
 
-void affiche_grille (grille g){
+void affiche_grille (grille g, int *tempsEvolution){
 	int i, l=g.nbl, c=g.nbc;
 	printf("\n");
+	printf("Temps : %d\n\n", *tempsEvolution);
 	affiche_trait(c);
 	for (i=0; i<l; ++i) {
 		affiche_ligne(c, g.cellules[i]);
@@ -28,19 +29,20 @@ void affiche_grille (grille g){
 }
 
 void efface_grille (grille g){
-	printf("\n\e[%dA",g.nbl*2 + 5); 
+	// printf("\n\e[%dA",g.nbl*2 + 5); 
+	printf("\n\e[%dA",g.nbl*2 + 7); 
 }
 
-void debut_jeu(grille *g, grille *gc){
+void debut_jeu(grille *g, grille *gc, int *tempsEvolution){
 	char c = getchar(); 
 	while (c != 'q') // touche 'q' pour quitter
 	{ 
 		switch (c) {
 			case '\n' : 
 			{ // touche "entree" pour évoluer
-				evolue(g,gc);
+				evolue(g,gc,tempsEvolution);
 				efface_grille(*g);
-				affiche_grille(*g);
+				affiche_grille(*g, tempsEvolution);
 				break;
 			}
 			case 'n' :
@@ -49,14 +51,21 @@ void debut_jeu(grille *g, grille *gc){
 				// efface_grille(*g);
 				printf("Merci d'indiquer le chemin vers la nouvelle grille à charger : ");
 				scanf("%s", nGrille);
-				printf("\n\n");
+				// efface_grille(*g);
+				// printf("\n\n");
+
+				(*tempsEvolution) = 0; // Réinitialisation du temps
 				init_grille_from_file(nGrille, g);
 				alloue_grille (g->nbl, g->nbc, gc);
-				affiche_grille(*g);
-				printf("\n\n");
+				affiche_grille(*g, tempsEvolution);
+				printf("\n");
 				
-				debut_jeu(g, gc);
+				debut_jeu(g, gc, tempsEvolution);
 				break;
+			}
+			case 'c' :
+			{
+				// voisinnage cyclique / non-cyclique
 			}
 			default : 
 			{ // touche non traitée

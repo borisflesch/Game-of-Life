@@ -27,7 +27,8 @@ int compte_voisins_vivants (int i, int j, grille g);
  * Fait évoluer la grille g d'un pas de temps
  * @param g  Pointeur sur la grille à faire évoluer
  * @param gc Pointeur sur la grille évoluée
+ * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours
  */
-void evolue (grille *g, grille *gc);
+void evolue (grille *g, grille *gc, int *tempsEvolution);
 
 #endif
