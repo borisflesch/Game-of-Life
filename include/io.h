@@ -19,14 +19,14 @@ void affiche_trait (int c);
  * @param c     Nombre de cellules de la ligne
  * @param ligne Tableau indiquant pour chaque cellule si elle est vivante ou morte
  */
-void affiche_ligne (int c, int* ligne);
+void affiche_ligne (int c, int* ligne, int vieillissement);
 
 /**
  * Affichage d'une grille
  * @param g Grille à afficher
  * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours
  */
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique);
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement);
 
 /**
  * Effacement d'une grille
