@@ -26,7 +26,7 @@ void affiche_ligne (int c, int* ligne);
  * @param g Grille à afficher
  * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours
  */
-void affiche_grille (grille g, int *tempsEvolution);
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique);
 
 /**
  * Effacement d'une grille
@@ -34,13 +34,11 @@ void affiche_grille (grille g, int *tempsEvolution);
  */
 void efface_grille (grille g);
 
-// debute le jeu
 /**
  * Débute le jeu
  * @param g  Pointeur sur la grille (principale)
  * @param gc Pointeur sur la seconde grille allouée aux mêmes nombres de lignes et colonnes que la première et qui permettra plus tard l'évolution de la grille de g vers gc
- * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours. (Mis à 0 au début du jeu)
  */
-void debut_jeu(grille *g, grille *gc, int *tempsEvolution);
+void debut_jeu(grille *g, grille *gc);
 
 #endif

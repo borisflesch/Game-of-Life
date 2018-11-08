@@ -15,7 +15,7 @@
  * cellules : tableau de tableau de cellules
  */
 typedef struct {int nbl; int nbc; int** cellules;} grille;
- 
+
 /**
  * Alloue une grille de taille l*c, et initialise toutes les cellules à mortes
  * @param l Nombre de lignes de la grille à allouer
@@ -60,7 +60,7 @@ static inline void set_morte(int i, int j, grille g){g.cellules[i][j] = 0;}
  * @param g Grille
  * @return  Booléen (0 ou 1) indiquant si la cellule est vivante ou non
  */
-static inline int est_vivante(int i, int j, grille g){return g.cellules[i][j] == 1;}
+static inline int est_vivante(int i, int j, grille g){return g.cellules[i][j] >= 1;}
 
 /**
  * Recopie gs dans gd (sans allocation)

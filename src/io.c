@@ -9,43 +9,61 @@ void affiche_trait (int c){
 
 void affiche_ligne (int c, int* ligne){
 	int i;
-	for (i=0; i<c; ++i) 
-		if (ligne[i] == 0 ) printf ("|   "); else printf ("| O ");
+	for (i=0; i<c; ++i)
+		if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", ligne[i]);
+		// if (ligne[i] == 0 ) printf ("|   "); else printf ("| O ");
 	printf("|\n");
 	return;
 }
 
-void affiche_grille (grille g, int *tempsEvolution){
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique){
 	int i, l=g.nbl, c=g.nbc;
 	printf("\n");
-	printf("Temps : %d\n\n", *tempsEvolution);
+	printf("\e[K");
+	printf("Temps : %d | ", tempsEvolution);
+	if (comptageCyclique) {
+		printf("Comptage : Cyclique | ");
+	} else {
+		printf("Comptage : Non-cyclique | ");
+	}
+	printf("\n\n");
 	affiche_trait(c);
 	for (i=0; i<l; ++i) {
 		affiche_ligne(c, g.cellules[i]);
 		affiche_trait(c);
-	}	
+	}
 	printf("\n");
 	return;
 }
 
 void efface_grille (grille g){
-	// printf("\n\e[%dA",g.nbl*2 + 5); 
-	printf("\n\e[%dA",g.nbl*2 + 7); 
+	// printf("\n\e[%dA",g.nbl*2 + 5);
+	printf("\n\e[%dA",g.nbl*2 + 7);
 }
 
-void debut_jeu(grille *g, grille *gc, int *tempsEvolution){
-	int comptageNonCyclique = 0;
+void debut_jeu(grille *g, grille *gc){
+	int tempsEvolution = 1;
+
+	int passerProchaineEvolution = 0;
+
+	int vieillissement = 0;
+
+	int comptageCyclique = 1;
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
 
-	char c = getchar(); 
+	char c = getchar();
 	while (c != 'q') // touche 'q' pour quitter
-	{ 
+	{
 		switch (c) {
-			case '\n' : 
+			case '\n' :
 			{ // touche "entree" pour évoluer
-				evolue(g,gc,tempsEvolution,compte_voisins_vivants);
-				efface_grille(*g);
-				affiche_grille(*g, tempsEvolution);
+				if (passerProchaineEvolution) {
+					passerProchaineEvolution = 0;
+				} else {
+					evolue(g,gc,&tempsEvolution,compte_voisins_vivants);
+					efface_grille(*g);
+					affiche_grille(*g, tempsEvolution, comptageCyclique);
+				}
 				break;
 			}
 			case 'n' :
@@ -54,47 +72,58 @@ void debut_jeu(grille *g, grille *gc, int *tempsEvolution){
 				// efface_grille(*g);
 				printf("Merci d'indiquer le chemin vers la nouvelle grille à charger : ");
 				scanf("%s", nGrille);
-				// efface_grille(*g);
-				printf("\n");
-				printf("> Comptage par défaut en mode Cyclique\n");
 
-				(*tempsEvolution) = 0; // Réinitialisation du temps
+				tempsEvolution = 1; // Réinitialisation du temps
 				init_grille_from_file(nGrille, g);
 				alloue_grille (g->nbl, g->nbc, gc);
-				affiche_grille(*g, tempsEvolution);
-				// printf("\n\e[2A");
+				affiche_grille(*g, tempsEvolution, comptageCyclique);
+
 				printf("\n\e[2A");
-				printf("\n\n");
-				
-				debut_jeu(g, gc, tempsEvolution);
+				printf("\n");
+
+				// debut_jeu(g, gc, tempsEvolution);
+				passerProchaineEvolution = 1;
+				/* On empêche l'évolution au clic sur "Entrée"
+				pour valider le nom de la nouvelle grille à charger */
+
 				break;
 			}
 			case 'c' :
 			{
 				// voisinnage cyclique / non-cyclique
-				if (comptageNonCyclique == 1) { // On repasse à un comptage cyclique
-					comptageNonCyclique = 0;
+				if (comptageCyclique == 0) { // On repasse à un comptage cyclique
+					comptageCyclique = 1;
 					compte_voisins_vivants = &(compte_voisins_vivants_cyclique);
-					printf("> Comptage été passé en mode Cyclique\n");
 				} else { // On repasse à un comptage non-cyclique
-					comptageNonCyclique = 1;
+					comptageCyclique = 0;
 					compte_voisins_vivants = &(compte_voisins_vivants_non_cyclique);
-					printf("> Comptage passé en mode Non-cyclique\n");
 				}
-				// printf("\n\e[1A");
-				printf("\n");
 
-				affiche_grille(*g, tempsEvolution);
+				efface_grille(*g);
+				affiche_grille(*g, tempsEvolution, comptageCyclique);
+				printf("\e[K");
 				printf("\n");
 				break;
 			}
-			default : 
+			case 'v' :
+			{
+				// activation / désactivation du vieillissement
+				if (vieillissement == 1) {
+					vieillissement = 0;
+					printf("> Vieillissement désactivé\n");
+				} else {
+					vieillissement = 1;
+					printf("> Vieillissement activé\n");
+				}
+				break;
+			}
+			default :
 			{ // touche non traitée
 				printf("\n\e[1A");
 				break;
 			}
 		}
-		c = getchar(); 
+		c = getchar();
 	}
-	return;	
+	return;
 }
