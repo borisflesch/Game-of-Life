@@ -61,7 +61,7 @@ void debut_jeu(grille *g, grille *gc){
 				if (passerProchaineEvolution) {
 					passerProchaineEvolution = 0;
 				} else {
-					evolue(g,gc,&tempsEvolution,compte_voisins_vivants);
+					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 					efface_grille(*g);
 					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
 				}

@@ -37,7 +37,8 @@ int compte_voisins_vivants_non_cyclique (int i, int j, grille g);
  * @param g  Pointeur sur la grille à faire évoluer
  * @param gc Pointeur sur la grille évoluée
  * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours
+ * @param vieillissement Entier indiquant si le vieillissement est activé (1) ou non (0)
  */
-void evolue (grille *g, grille *gc, int *tempsEvolution, int (*compte_voisins_vivants) (int, int, grille));
+void evolue (grille *g, grille *gc, int *tempsEvolution, int (*compte_voisins_vivants) (int, int, grille), int vieillissement);
 
 #endif
