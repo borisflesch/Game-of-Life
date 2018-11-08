@@ -29,4 +29,5 @@ dist:
 clean:
 	rm -f $(ODIR)/*.o
 	rm -f $(BDIR)/*
+	rm -rf dist/
 	rm -rf doc/
