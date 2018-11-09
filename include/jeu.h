@@ -7,7 +7,7 @@
 #include "grille.h"
 
 /**
- * Modulo modifié pour traiter correctement les bords i=0 et j=0 dans le calcul des voisins avec bords cycliques
+ * Modulo modifié pour traiter correctement le calcul des voisins avec bords cycliques
  * @param  i Première opérande
  * @param  m Seconde opérande
  * @return   Valeur du modulo modifié
@@ -34,10 +34,11 @@ int compte_voisins_vivants_non_cyclique (int i, int j, grille g);
 
 /**
  * Fait évoluer la grille g d'un pas de temps
- * @param g  Pointeur sur la grille à faire évoluer
- * @param gc Pointeur sur la grille évoluée
- * @param tempsEvolution Entier représentant le temps (pas) d'évolution de la grille en cours
- * @param vieillissement Entier indiquant si le vieillissement est activé (1) ou non (0)
+ * @param g                      Pointeur sur la grille à faire évoluer
+ * @param gc                     Pointeur sur la grille évoluée
+ * @param tempsEvolution         Entier représentant le temps (pas) d'évolution de la grille en cours
+ * @param compte_voisins_vivants Pointeur sur une fonction de comptage des voisins vivants d'une cellule
+ * @param vieillissement         Indique si le vieillissement est activé (1) ou non (0)
  */
 void evolue (grille *g, grille *gc, int *tempsEvolution, int (*compte_voisins_vivants) (int, int, grille), int vieillissement);
 
