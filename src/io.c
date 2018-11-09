@@ -9,9 +9,13 @@ void affiche_trait (int c){
 
 void affiche_ligne (int c, int* ligne, int vieillissement){
 	int i;
-	for (i=0; i<c; ++i)
-		if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", vieillissement ? ligne[i] : 0);
-		// if (ligne[i] == 0 ) printf ("|   "); else printf ("| O ");
+	if (vieillissement) {
+		for (i=0; i<c; ++i)
+			if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", ligne[i]);
+	} else {
+		for (i=0; i<c; ++i)
+			if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", 0);
+	}
 	printf("|\n");
 	return;
 }
@@ -82,10 +86,9 @@ void debut_jeu(grille *g, grille *gc){
 				printf("\n\e[2A");
 				printf("\n");
 
-				// debut_jeu(g, gc, tempsEvolution);
-				passerProchaineEvolution = 1;
 				/* On empêche l'évolution au clic sur "Entrée"
-				pour valider le nom de la nouvelle grille à charger */
+				lors du chargement de la nouvelle grille */
+				passerProchaineEvolution = 1;
 
 				break;
 			}
@@ -100,8 +103,7 @@ void debut_jeu(grille *g, grille *gc){
 					compte_voisins_vivants = &(compte_voisins_vivants_cyclique);
 				}
 
-				efface_grille(*g);
-				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+				printf("\e[A");
 				printf("\e[K");
 				printf("\n");
 				break;
@@ -110,8 +112,8 @@ void debut_jeu(grille *g, grille *gc){
 			{
 				// activation / désactivation du vieillissement
 				vieillissement = !vieillissement;
-				efface_grille(*g);
-				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+
+				printf("\e[A");
 				printf("\e[K");
 				printf("\n");
 				break;

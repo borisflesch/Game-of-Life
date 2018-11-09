@@ -1,5 +1,7 @@
-Projet : Game of Life
-=====================
+# Projet : Game of Life
+
+![Build Status](https://semaphoreapp.com/api/v1/projects/d4cca506-99be-44d2-b19e-176f36ec8cf1/128505/shields_badge.svg)
+![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.2&x2=0)
 
 Ce [dépôt](https://git.unistra.fr/bflesch/Projet-Game-of-Life) contient l'intégralité du projet du cours de Techniques de Développement intitulé « Game of Life ».
 
@@ -18,14 +20,14 @@ Structure des fichiers
 Commandes importantes
 ---------------------
 
-### Pour compiler le programme
+### Compiler le programme
 
 ~~~{.sh}
 make
 ~~~
 Le fichier exécutable se trouve au chemin suivant : /bin/main
 
-### Pour exécuter le programme
+### Exécuter le programme
 
 ~~~{.sh}
 ./bin/make <chemin vers une grille>
@@ -36,14 +38,21 @@ Exemple :
 ./bin/make "grilles/grille3.txt"
 ~~~
 
-### Pour générer la documentation (Doxygen)
+### Générer la documentation (Doxygen)
 
 ~~~{.sh}
 doxygen
 ~~~
 Il suffit ensuite d'ouvrir le fichier /doc/html/index.html pour accéder à l'intégralité de la documentation
 
-### Pour nettoyer les artefacts de compilation
+### Générer une archive du programme
+
+~~~{.sh}
+make dist
+~~~
+L'archive sera créée dans le répertoire /dist
+
+### Nettoyer les artefacts de compilation
 
 ~~~{.sh}
 make clean
@@ -86,9 +95,15 @@ Celui-ci produira la grille suivante une fois chargé :
 ![](https://fboris.com/documents/project-game-of-life-techdev/grid-example.png)
 
 
-Journal des versions
---------------------
-**Organisation des versions du projet :** pour chaque version de la forme v0.x, « x » représente le niveau finalisé dans cette version (cf. sujets de TP). Des versions v0.x.y peuvent exister, auquel cas « x » représente toujours le dernier niveau finalisé et « y » représente la dernière question terminée dans le niveau suivant.
+Versions
+--------
+### Organisation des versions du projet
+Les versions **v0.x** sont des versions stables du projet dans lesquelles « x » représente le dernier niveau finalisé présent dans cette version (cf. sujets de TP).
+
+Des versions **v0.x.y** peuvent exister entre les niveaux, auquel cas « x » représente toujours le dernier niveau finalisé et « y » représente la dernière question terminée dans le niveau suivant. Néamoins, ces versions sont susceptibles de contenir des bugs ou **anomalies**. Il est donc préférable de les manipuler avec **précaution** et de se référer aux **v0.x pour des versions stables**.
+
+### Journal des versions
+
 - v0.2 : Niveau 2 finalisé
 - v0.1.2 : Question 2 du niveau 2 terminée
 - v0.1 : Niveau 1 finalisé
