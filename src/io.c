@@ -1,3 +1,4 @@
+#include <string.h>
 #include "io.h"
 
 void affiche_trait (int c){
@@ -73,13 +74,23 @@ void debut_jeu(grille *g, grille *gc){
 			}
 			case 'n' :
 			{ // touche 'n' pour charger dynamiquement une nouvelle grille
-				char nGrille[255];
+				int erreurInitialisation = 0;
+
 				// efface_grille(*g);
-				printf("Merci d'indiquer le chemin vers la nouvelle grille à charger : ");
-				scanf("%s", nGrille);
+				do {
+					char numeroGrille[10];
+					char fichierGrille[100] = "grilles/grille";
+					printf("Numéro de la nouvelle grille à charger : ");
+					scanf("%s", numeroGrille);
+					strcat(fichierGrille, numeroGrille);
+					strcat(fichierGrille, ".txt");
+					erreurInitialisation = init_grille_from_file(fichierGrille, g);
+					if (erreurInitialisation) {
+						printf("Erreur : Le fichier grille \"%s\" est introuvable\n", fichierGrille);
+					}
+				} while (erreurInitialisation);
 
 				tempsEvolution = 1; // Réinitialisation du temps
-				init_grille_from_file(nGrille, g);
 				alloue_grille (g->nbl, g->nbc, gc);
 				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
 

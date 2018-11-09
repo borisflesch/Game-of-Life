@@ -34,8 +34,9 @@ void libere_grille (grille* g);
  * Alloue et initalise la grille g à partir d'un fichier
  * @param filename Nom du fichier à partir du quel la grille doit être initialisée
  * @param g Grille à initialiser
+ * @return 0 si aucune erreur lors de la lecture du fichier, 1 sinon
  */
-void init_grille_from_file (char * filename, grille* g);
+int init_grille_from_file (char * filename, grille* g);
 
 /**
  * Rend vivante la cellule (i,j) de la grille g
