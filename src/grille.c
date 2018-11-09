@@ -15,7 +15,11 @@ void alloue_grille (int l, int c, grille* g){
 }
 
 void libere_grille (grille* g){
-	free(g);
+	int i;
+	for (i = 0; i < g->nbl; i++) {
+		free(g->cellules[i]);
+	}
+	free(g->cellules);
 }
 
 int init_grille_from_file (char * filename, grille* g){
