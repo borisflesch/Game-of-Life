@@ -26,10 +26,13 @@ main: main.o jeu.o io.o grille.o
 
 dist:
 	@mkdir -p dist
-	tar -J -cvf dist/projet.tar.xz grilles include src makefile Doxyfile
+	tar -J -cvf dist/FleschBoris-GoL-v0.2.tar.xz grilles include src makefile Doxyfile
+	@echo "\n=== Archive créée avec succès ==="
+	@echo "Chemin relatif de l'archive : dist/FleschBoris-GoL-v0.2.tar.xz"
 
 clean:
 	rm -f $(ODIR)/*.o
 	rm -f $(BDIR)/*
 	rm -rf dist/
 	rm -rf doc/
+	@echo "\n=== Artefacts de compilation éliminés avec succès ==="
