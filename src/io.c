@@ -30,7 +30,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	comptageCyclique ? printf("Cyclique") : printf("Non-cyclique");
 	printf(" | ");
 	printf("Vieillissement : ");
-	vieillissement ? printf("Activé") : printf("Désactivé");
+	vieillissement ? printf("Active") : printf("Desactive");
 
 	printf("\n\n");
 	affiche_trait(c);
@@ -80,7 +80,7 @@ void debut_jeu(grille *g, grille *gc){
 				do {
 					char numeroGrille[10];
 					char fichierGrille[100] = "grilles/grille";
-					printf("Numéro de la nouvelle grille à charger : ");
+					printf("Numero de la nouvelle grille a charger : ");
 					scanf("%s", numeroGrille);
 					strcat(fichierGrille, numeroGrille);
 					strcat(fichierGrille, ".txt");
@@ -131,11 +131,14 @@ void debut_jeu(grille *g, grille *gc){
 			}
 			default :
 			{ // touche non traitée
-				printf("\n\e[1A");
+				printf("\e[A");
+				printf("\e[K");
+				printf("\n");
 				break;
 			}
 		}
 		c = getchar();
 	}
+	printf("A bientot !\n");
 	return;
 }

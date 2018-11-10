@@ -9,7 +9,7 @@ int main (int argc, char ** argv) {
 	int initialisationErreur = 0;
 
 	if (argc != 2 ) {
-		printf("usage : main <numero de la grille>");
+		printf("usage : main <numero de la grille>\n");
 		return 1;
 	}
 
@@ -24,6 +24,12 @@ int main (int argc, char ** argv) {
 		printf("Erreur : Le fichier grille \"%s\" est introuvable\n", fichierGrille);
 		return 1;
 	}
+
+	printf("Commandes du programme :\n");
+	printf("- n : Charger une nouvelle grille\n");
+	printf("- c : Passer en mode cyclique/non-cyclique\n");
+	printf("- v : Activer/desactiver le vieillissement\n");
+	printf("- q : Quitter le programme\n");
 
 	alloue_grille (g.nbl, g.nbc, &gc);
 
