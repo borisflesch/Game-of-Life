@@ -17,6 +17,8 @@ vpath %.o $(ODIR)
 main: main.o jeu.o io.o grille.o
 	@mkdir -p $(BDIR)
 	$(CC) $(CFLAGS) -o $(BDIR)/$@ $(ODIR)/main.o $(ODIR)/jeu.o $(ODIR)/io.o $(ODIR)/grille.o
+	@echo "\n=== Compilation terminée avec succès ==="
+	@echo "Lancez le programme avec ./bin/main <numéro de grille>"
 
 %.o: %.c
 	@mkdir -p $(ODIR)
