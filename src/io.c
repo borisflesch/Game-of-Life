@@ -76,6 +76,7 @@ void debut_jeu(grille *g, grille *gc){
 				int erreurInitialisation = 0;
 
 				libere_grille(g);
+				libere_grille(gc);
 				do {
 					char numeroGrille[10];
 					char fichierGrille[100] = "grilles/grille";
