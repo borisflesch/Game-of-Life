@@ -15,7 +15,7 @@ void affiche_ligne (int c, int* ligne, int vieillissement){
 			if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", ligne[i]);
 	} else {
 		for (i=0; i<c; ++i)
-			if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", 0);
+			if (ligne[i] == 0 ) printf ("|   "); else printf ("| 0 ");
 	}
 	printf("|\n");
 	return;
@@ -43,7 +43,6 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 }
 
 void efface_grille (grille g){
-	// printf("\n\e[%dA",g.nbl*2 + 5);
 	printf("\n\e[%dA",g.nbl*2 + 7);
 }
 
@@ -76,7 +75,7 @@ void debut_jeu(grille *g, grille *gc){
 			{ // touche 'n' pour charger dynamiquement une nouvelle grille
 				int erreurInitialisation = 0;
 
-				// efface_grille(*g);
+				libere_grille(g);
 				do {
 					char numeroGrille[10];
 					char fichierGrille[100] = "grilles/grille";

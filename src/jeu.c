@@ -42,8 +42,9 @@ void evolue (grille *g, grille *gc, int *tempsEvolution, int (*compte_voisins_vi
 			{
 				// evolution d'une cellule vivante
 				if ( v!=2 && v!= 3 ) set_morte(i,j,*g);
-				// sinon, incrémentation de son âge (vieillissement)
-				else g->cellules[i][j]++;
+				// sinon, si vieillissement activé, incrémentation de son âge (vieillissement)
+				else if (vieillissement) g->cellules[i][j]++;
+				else g->cellules[i][j] = 1; // Réinitialisation de l'age si la cellule avait subit un vieillissement
 
 				if (vieillissement && g->cellules[i][j] > 8) set_morte(i,j,*g);
 			}
