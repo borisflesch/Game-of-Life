@@ -70,6 +70,8 @@ Si vous souhaitez ajouter vos propres conditions initiales pour le jeu, vous pou
 - L_CELLNV_X : Ligne de la cellule non-viable X (entre 0 et NBL - 1)
 - C_CELLNV_X : Colonne de la cellule non-viable X (entre 0 et NBC - 1)
 
+*Toute la partie concernant les cellules non-viables est facultative lors de la création d'une nouvelle grille.*
+
 Fichier grilleX.txt :
 ~~~{.txt}
 NBL NBC
@@ -113,6 +115,7 @@ Des versions **v0.x.y** peuvent exister entre les niveaux, auquel cas « x » re
 
 ### Journal des versions
 
+- v0.3 : Niveau 3 finalisé
 - v0.2 : Niveau 2 finalisé
 - v0.1.2 : Question 2 du niveau 2 terminée
 - v0.1 : Niveau 1 finalisé
