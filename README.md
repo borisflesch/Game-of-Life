@@ -66,16 +66,25 @@ Si vous souhaitez ajouter vos propres conditions initiales pour le jeu, vous pou
 - NBCELL : Nombre de cellules initiales dans la grille
 - L_CELL_X : Ligne de la cellule X (entre 0 et NBL - 1)
 - C_CELL_X : Colonne de la cellule X (entre 0 et NBC - 1)
+- NBCELL_NON_VIABLES : Nombre de cellules non-viables dans la grille
+- L_CELLNV_X : Ligne de la cellule non-viable X (entre 0 et NBL - 1)
+- C_CELLNV_X : Colonne de la cellule non-viable X (entre 0 et NBC - 1)
 
 Fichier grilleX.txt :
 ~~~{.txt}
 NBL NBC
 
 NBCELL
-L_CELL_1 C_CELL_2
+L_CELL_1 C_CELL_1
 L_CELL_2 C_CELL_2
 ...
 L_CELL_X C_CELL_X
+
+NBCELL_NON_VIABLES
+L_CELLNV_1 C_CELLNV_1
+L_CELLNV_2 C_CELLNV_2
+...
+L_CELLNV_X C_CELLNV_X
 ~~~
 
 ### Exemple de fichier grille

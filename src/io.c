@@ -11,11 +11,17 @@ void affiche_trait (int c){
 void affiche_ligne (int c, int* ligne, int vieillissement){
 	int i;
 	if (vieillissement) {
-		for (i=0; i<c; ++i)
-			if (ligne[i] == 0 ) printf ("|   "); else printf ("| %d ", ligne[i]);
+		for (i=0; i<c; ++i) {
+			if (ligne[i] == 0 ) printf ("|   ");
+			else if (ligne[i] == -1) printf("| X "); // Non-viable
+			else printf ("| %d ", ligne[i]);
+		}
 	} else {
-		for (i=0; i<c; ++i)
-			if (ligne[i] == 0 ) printf ("|   "); else printf ("| 0 ");
+		for (i=0; i<c; ++i) {
+			if (ligne[i] == 0 ) printf ("|   ");
+			else if (ligne[i] == -1) printf("| X "); // Non-viable
+			else printf ("| 0 ");
+		}
 	}
 	printf("|\n");
 	return;

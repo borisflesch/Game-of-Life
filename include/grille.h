@@ -56,6 +56,14 @@ static inline void set_vivante(int i, int j, grille g){g.cellules[i][j] = 1;}
 static inline void set_morte(int i, int j, grille g){g.cellules[i][j] = 0;}
 
 /**
+ * Rend non-viable la cellule (i,j) de la grille g
+ * @param[in]  i Ligne de la cellule
+ * @param[in]  j Colonne de la cellule
+ * @param[out] g Grille
+ */
+static inline void set_non_viable(int i, int j, grille g){g.cellules[i][j] = -1;}
+
+/**
  * Teste si la cellule (i,j) de la grille g est vivante
  * @param[in] i Abscisse de la cellule dans la grille
  * @param[in] j Ordonnée de la cellule dans la grille
@@ -63,6 +71,15 @@ static inline void set_morte(int i, int j, grille g){g.cellules[i][j] = 0;}
  * @return      Booléen (0 ou 1) indiquant si la cellule est vivante ou non
  */
 static inline int est_vivante(int i, int j, grille g){return g.cellules[i][j] >= 1;}
+
+/**
+ * Teste si la cellule (i,j) de la grille g est non-viable
+ * @param[in] i Abscisse de la cellule dans la grille
+ * @param[in] j Ordonnée de la cellule dans la grille
+ * @param[in] g Grille
+ * @return      Booléen (0 ou 1) indiquant si la cellule est non-viable ou non
+ */
+static inline int est_non_viable(int i, int j, grille g){return g.cellules[i][j] == -1;}
 
 /**
  * Recopie gs dans gd (sans allocation)
