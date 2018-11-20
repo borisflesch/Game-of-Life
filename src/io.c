@@ -27,7 +27,7 @@ void affiche_ligne (int c, int* ligne, int vieillissement){
 	return;
 }
 
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement){
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo){
 	int i, l=g.nbl, c=g.nbc;
 	printf("\n");
 	printf("\e[K");
@@ -52,7 +52,7 @@ void efface_grille (grille g){
 	printf("\n\e[%dA",g.nbl*2 + 7);
 }
 
-void debut_jeu(grille *g, grille *gc){
+void debut_jeu(grille *g, grille *gc, int useCairo){
 	int tempsEvolution = 1;
 
 	int passerProchaineEvolution = 0;
@@ -73,7 +73,7 @@ void debut_jeu(grille *g, grille *gc){
 				} else {
 					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 					efface_grille(*g);
-					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 				}
 				break;
 			}
@@ -98,7 +98,7 @@ void debut_jeu(grille *g, grille *gc){
 
 				tempsEvolution = 1; // Réinitialisation du temps
 				alloue_grille (g->nbl, g->nbc, gc);
-				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 
 				printf("\n\e[2A");
 				printf("\n");
