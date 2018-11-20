@@ -5,11 +5,11 @@ IDIR = include
 ODIR = obj
 BDIR = bin
 SDIR = src
-CPPFLAGS += -Iinclude -I/usr/include/cairo
+CPPFLAGS += -I/usr/include/cairo -Iinclude
 LDFLAGS += -lcairo -lm -lX11
 
 # Flags compilateur
-CFLAGS = -I$(IDIR) -Wall -g
+CFLAGS = $(CPPFLAGS) -Wall -g
 # OBJECTS = $(SOURCES:src/%.c=%.o)
 
 vpath %.h $(IDIR)
@@ -18,7 +18,7 @@ vpath %.o $(ODIR)
 
 main: main.o jeu.o io.o grille.o
 	@mkdir -p $(BDIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BDIR)/$@ $(ODIR)/main.o $(ODIR)/jeu.o $(ODIR)/io.o $(ODIR)/grille.o
+	$(CC) $(CFLAGS) -o $(BDIR)/$@ $(ODIR)/main.o $(ODIR)/jeu.o $(ODIR)/io.o $(ODIR)/grille.o $(LDFLAGS)
 	@echo "\n=== Compilation terminée avec succès ==="
 	@echo "Lancez le programme avec ./bin/main <numéro de grille>"
 
