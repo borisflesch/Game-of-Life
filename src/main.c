@@ -12,29 +12,57 @@
 #define SIZEY 800
 
 
-void paint(cairo_surface_t *surface)
+Display *dpy;
+Window rootwin;
+Window win;
+XEvent e;
+int scr;
+cairo_surface_t *sfc;
+
+
+cairo_surface_t *cairo_create_x11_surface0(int x, int y)
 {
-	// create cairo mask
-	cairo_t *cr;
-	cr=cairo_create(surface);
+    Display *dsp;
+    Drawable da;
+    int screen;
+    cairo_surface_t *sfc;
 
-	// background
-	cairo_set_source_rgb (cr, 0.0, 0.0, 1.0);
-	cairo_paint(cr);
-	
-	// line
-	cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
-	cairo_move_to (cr, 10.0, 50.0);
-	cairo_line_to(cr, 100.0,50.0);
-	cairo_set_line_width (cr, 1);
-	cairo_stroke (cr);
+    if ((dsp = XOpenDisplay(NULL)) == NULL) {
+		fprintf(stderr, "ERROR: Could not open display\n");
+        exit(1);
+	}
+    screen = DefaultScreen(dsp);
+	rootwin = RootWindow(dsp, screen);
+    /*da = XCreateSimpleWindow(dsp, DefaultRootWindow(dsp),
+        0, 0, x, y, 0, 0, 0);*/
 
-	// filled rectangle
-	cairo_rectangle(cr,30,30,50,50);
-	cairo_set_source_rgb (cr, 0.0, 1.0, 0.0);
-	cairo_fill(cr);	
+	da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
+			WhitePixel(dsp, screen), WhitePixel(dsp, screen));
+    // XSelectInput(dsp, da, ButtonPressMask | KeyPressMask);
+	// XSelectInput(dsp, da, ExposureMask|ButtonPressMask);
+	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
+    XMapWindow(dsp, da);
 
-	cairo_destroy(cr); // destroy cairo mask
+		//win=XCreateSimpleWindow(dpy, rootwin, 1, 1, SIZEX, SIZEY, 0, 
+				//BlackPixel(dpy, scr), BlackPixel(dpy, scr));
+
+	XStoreName(dsp, da, "Jeu de la vie");
+
+    sfc = cairo_xlib_surface_create(dsp, da,
+        DefaultVisual(dsp, screen), x, y);
+    cairo_xlib_surface_set_size(sfc, x, y);
+
+    return sfc;
+}
+
+/*! Destroy cairo Xlib surface and close X connection.
+ */
+void cairo_close_x11_surface(cairo_surface_t *sfc)
+{
+   Display *dsp = cairo_xlib_surface_get_display(sfc);
+
+   cairo_surface_destroy(sfc);
+   XCloseDisplay(dsp);
 }
 
 int main (int argc, char ** argv) {
@@ -58,43 +86,39 @@ int main (int argc, char ** argv) {
 		return 1;
 	}
 
+	alloue_grille (g.nbl, g.nbc, &gc);
+
 	if (useCairo) {
-		Display *dpy;
-		Window rootwin;
-		Window win;
-		XEvent e;
-		int scr;
-		
-		// init the display
-		if(!(dpy=XOpenDisplay(NULL))) {
-			fprintf(stderr, "ERROR: Could not open display\n");
-			exit(1);
-		}
 
-		scr=DefaultScreen(dpy);
-		rootwin=RootWindow(dpy, scr);
 
-		win=XCreateSimpleWindow(dpy, rootwin, 1, 1, SIZEX, SIZEY, 0, 
-				BlackPixel(dpy, scr), BlackPixel(dpy, scr));
+		printf("Commandes du programme :\n");
+		printf("- n : Charger une nouvelle grille\n");
+		printf("- c : Passer en mode cyclique/non-cyclique\n");
+		printf("- v : Activer/desactiver le vieillissement\n");
+		printf("- q : Quitter le programme\n");
 
-		XStoreName(dpy, win, "jeu de la vie");
-		XSelectInput(dpy, win, ExposureMask|ButtonPressMask);
-		XMapWindow(dpy, win);
-		
-		// create cairo surface
-		cairo_surface_t *cs; 
-		cs=cairo_xlib_surface_create(dpy, win, DefaultVisual(dpy, 0), SIZEX, SIZEY);
+		sfc = cairo_create_x11_surface0(SIZEX, SIZEY);
 
 		// run the event loop
-		while(1) {
-			XNextEvent(dpy, &e);
-			if(e.type==Expose && e.xexpose.count<1) {
-				paint(cs);
-			} else if(e.type==ButtonPress) break;
-		}
+		// while(1) {
+			// XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
+			// if (e.type==Expose && e.xexpose.count<1) {
+				// paint();
+				// affiche_grille(g, 1, 1, 0, useCairo);
+				
+				debut_jeu(&g, &gc, useCairo);
+			// } /* else if(e.type==ButtonPress) break; */
 
-		cairo_surface_destroy(cs); // destroy cairo surface
-		XCloseDisplay(dpy); // close the display
+			// printf("Expose is %d\n", Expose);
+			// printf("Got event: %d\n", e.type);
+
+			// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
+			// affiche_grille(g, 1, 1, 0, useCairo);
+
+			// debut_jeu(&g, &gc, useCairo);
+		// }
+
+		cairo_close_x11_surface(sfc); // destroy cairo surface
 
 	} else {
 
@@ -104,14 +128,12 @@ int main (int argc, char ** argv) {
 		printf("- v : Activer/desactiver le vieillissement\n");
 		printf("- q : Quitter le programme\n");
 
+		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
+		affiche_grille(g, 1, 1, 0, useCairo);
+
+		debut_jeu(&g, &gc, useCairo);
+
 	}
-
-	alloue_grille (g.nbl, g.nbc, &gc);
-
-	// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
-	affiche_grille(g, 1, 1, 0, useCairo);
-
-	debut_jeu(&g, &gc, useCairo);
 
 	libere_grille(&g);
 	libere_grille(&gc);

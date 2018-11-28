@@ -13,6 +13,7 @@
  * @param[in] c Nombre de cellules du trait
  */
 void affiche_trait (int c);
+void affiche_trait_cairo (int c, int hauteur);
 
 /**
  * Affichage d'une ligne de la grille
@@ -21,6 +22,7 @@ void affiche_trait (int c);
  * @param[in] vieillissement Indique si le vieillissement est activé (1) ou désactivé (0)
  */
 void affiche_ligne (int c, int* ligne, int vieillissement);
+void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur);
 
 /**
  * Affichage d'une grille
