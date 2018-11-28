@@ -26,7 +26,8 @@ void affiche_trait_cairo (int c, int hauteur){
 	float tailleLigneGrille = 30.;
 	cairo_t *cr;
 	cr = cairo_create(sfc);
-	cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+	// cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 	cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
 	
 	cairo_move_to(cr, MARGE_GAUCHE_GRILLE, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
@@ -63,65 +64,77 @@ void affiche_ligne (int c, int* ligne, int vieillissement) {
 
 void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur){
 	int i;
+	char ageBuffer[255];
 	float tailleColonneGrille = (float) LARGEUR_GRILLE / (float) c;
 	// float tailleLigneGrille = (float) HAUTEUR_GRILLE / (float) hauteur;
 	float tailleLigneGrille = 30.;
 	// printf("%f\n\n", tailleColonneGrille);
-	if (vieillissement) {
-		for (i=0; i<c; ++i) {
-			if (ligne[i] == 0 ) printf ("|   ");
-			else if (ligne[i] == -1) printf("| X "); // Non-viable
-			else printf ("| %d ", ligne[i]);
-		}
-	} else {
 
-		cairo_t *cr, *crcells;
-		cr = cairo_create(sfc);
-		crcells = cairo_create(sfc);
-		cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
-		cairo_set_source_rgb(crcells, 0.0, 0.0, 0.0);
-		cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
-		
-		cairo_move_to(cr, MARGE_GAUCHE_GRILLE, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+
+		// for (i=0; i<c; ++i) {
+		// 	if (ligne[i] == 0 ) printf ("|   ");
+		// 	else if (ligne[i] == -1) printf("| X "); // Non-viable
+		// 	else printf ("| %d ", ligne[i]);
+		// }
+
+	cairo_t *cr, *crcells;
+	cr = cairo_create(sfc);
+	crcells = cairo_create(sfc);
+	// cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+	// cairo_set_source_rgb(crcells, 0.0, 0.0, 0.0);
+	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
+	cairo_set_source_rgb(crcells, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
+	cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
 	
+	cairo_move_to(cr, MARGE_GAUCHE_GRILLE, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
 
-		for (i=0; i<c; ++i) {
 
-				// cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				// cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+	for (i=0; i<c; ++i) {
 
-			if (ligne[i] == 0) {
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-			} else if (ligne[i] == -1) {
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-			} else {
-				cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i-1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-				// cairo_set_line_width(cr, 2CAIRO_LINE_WIDTH);
-				// cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-				// cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-				// cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
-				// cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			// cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			// cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
 
-				// cairo_rectangle(cr, 20, 20, 120, 80);
-				cairo_rectangle(crcells, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille),
-				tailleColonneGrille, tailleLigneGrille);
-				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+		if (ligne[i] == 0) {
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+		} else if (ligne[i] == -1) {
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+		} else {
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
+			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i-1) * tailleColonneGrille) + 2, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + 2);
+			cairo_rectangle(crcells, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille + 3, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille + 3),
+			tailleColonneGrille - 3, tailleLigneGrille - 3);
+			cairo_fill(crcells);
+
+			if (vieillissement) {
+				sprintf(ageBuffer, "%d", ligne[i]);
+				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille) + tailleColonneGrille/3,
+				MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille*2/3);
+				cairo_set_source_rgb (cr, 0.19215686274509805, 0.20392156862745098, 0.24705882352941178);
+				cairo_select_font_face(cr, "Arial",
+					CAIRO_FONT_SLANT_NORMAL,
+					CAIRO_FONT_WEIGHT_BOLD);
+				cairo_set_font_size(cr, 15);
+				cairo_show_text(cr, ageBuffer);
+
+				cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 			}
-		}
 
-		cairo_fill(crcells);
-		cairo_stroke(cr);
-		cairo_destroy(cr);
+			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+		}
 	}
+
+	cairo_fill(crcells);
+	cairo_stroke(cr);
+	cairo_destroy(cr);
+		
 	return;
 }
 
@@ -143,16 +156,21 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 		affiche_trait(c);
 	}
 	printf("\n");
-	// return;
+	return;
+}
 
-	// int i, l=g.nbl, c=g.nbc;
-	char strTemps[50];
+void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo){
+	int i, l=g.nbl, c=g.nbc;
+	char strTemps[255], strComptageCyclique[255], strVieillissement[255];
 	sprintf(strTemps, "- Temps : %d", tempsEvolution);
+	sprintf(strComptageCyclique, comptageCyclique ? "- Comptage : Cyclique" : "- Comptage : Non-cyclique");
+	sprintf(strVieillissement, vieillissement ? "- Vieillissement : Active" : "- Vieillissement : Desactive");
+
 
 	cairo_t *cr;
 	cr = cairo_create(sfc);
 
-	// cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+	cairo_set_source_rgb(cr, 0.396078431372549, 0.6901960784313725, 0.9294117647058824);
 	// cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
 	// cairo_move_to(cr, 20.0, 550.0);
 	// cairo_line_to(cr, 20.0, 370.0);
@@ -169,11 +187,36 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 
 	cairo_set_font_size(cr, 22);
 	cairo_move_to(cr, 500, 80);
+	cairo_move_to(cr, 500, 75);
+	cairo_show_text(cr, "Commandes :");
+
+	cairo_move_to(cr, 500, 240);
 	cairo_show_text(cr, "Informations :");
 
+
+	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
+
+	cairo_select_font_face(cr, "Arial",
+		CAIRO_FONT_SLANT_NORMAL,
+		CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr, 18);
-	cairo_move_to(cr, 500, 120);
-	cairo_show_text(cr, strTemps);  
+	cairo_move_to(cr, 500, 100);
+	cairo_show_text(cr, "- n : Charger une nouvelle grille");
+	cairo_move_to(cr, 500, 125);
+	cairo_show_text(cr, "- c : Passer en mode cyclique/non-cyclique");
+	cairo_move_to(cr, 500, 150);
+	cairo_show_text(cr, "- v : Activer/desactiver le vieillissement");
+	cairo_move_to(cr, 500, 175);
+	cairo_show_text(cr, "- d : Ouvrir la doc (doxygen & firefox requis)");
+	cairo_move_to(cr, 500, 200);
+	cairo_show_text(cr, "- q : Quitter le programme");
+
+	cairo_move_to(cr, 500, 265);
+	cairo_show_text(cr, strTemps);
+	cairo_move_to(cr, 500, 290);
+	cairo_show_text(cr, strComptageCyclique);  
+	cairo_move_to(cr, 500, 315);
+	cairo_show_text(cr, strVieillissement);  
 
 	// // cairo_move_to(cr, 20, 530);
 	// // cairo_show_text(cr, "very very interesting. I guess.");
@@ -190,22 +233,16 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	return;
 }
 
-float testInc = 1.0;
-
 void efface_grille (grille g){
 	printf("\n\e[%dA",g.nbl*2 + 7);
+}
 
-	// Clear surface
+void efface_grille_cairo () {
 	cairo_t *cr;
 	cr = cairo_create(sfc);
-	cairo_set_source_rgb (cr, 255.0, 255.0, 255.0);
+	cairo_set_source_rgb (cr, 0.19215686274509805, 0.20392156862745098, 0.24705882352941178);
 	cairo_paint(cr);
 	cairo_destroy(cr);
-	// cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
-	// cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-	// cairo_rectangle(cr, 0.0, 0.0, 800., 800.);
-	// cairo_paint_with_alpha(cr, 1.0);
-	// cairo_destroy(cr);
 }
 
 void debut_jeu(grille *g, grille *gc, int useCairo){
@@ -219,25 +256,34 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
 
 	if (useCairo) {
+		
 		while(1) {
-			affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+			affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 			XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
 			// printf("ev %d\n", e.type);
 			// if (e.type==Expose && e.xexpose.count<1) {
 			if (e.type == KeyPress) { // Touche pressée
 				// printf("keykey%d\n", e.xkey.keycode);
 				// return;
-				if (e.xkey.keycode == 36) { // Touche entrée
-					if (passerProchaineEvolution) {
-						passerProchaineEvolution = 0;
-					} else {
-						evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
-						efface_grille(*g);
-						affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
-					}
+				if (e.xkey.keycode == 36 || e.xkey.keycode == 104) { // Touche entrée (ou entrée numpad)
+					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
+					// efface_grille_cairo();
+					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 				} else if (e.xkey.keycode == 57) { // Touche n
 
 					int erreurInitialisation = 0;
+
+					cairo_t *cr;
+					cr = cairo_create(sfc);
+					cairo_set_source_rgb (cr, 255.0, 255.0, 255.0);
+					cairo_select_font_face(cr, "Arial",
+						CAIRO_FONT_SLANT_NORMAL,
+						CAIRO_FONT_WEIGHT_NORMAL);
+					cairo_set_font_size(cr, 18);
+					// cairo_move_to(cr, SIZEX + 20, SIZEY - 20);
+					cairo_move_to(cr, 20, 20);
+					cairo_show_text(cr, "Merci d'indiquer la nouvelle grille à charger dans le terminal...");
+					cairo_destroy(cr);
 
 					libere_grille(g);
 					libere_grille(gc);
@@ -256,24 +302,34 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 
 					tempsEvolution = 1; // Réinitialisation du temps
 					alloue_grille (g->nbl, g->nbc, gc);
-					efface_grille(*g);
-					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+					// efface_grille_cairo();
+					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 
-					printf("\n\e[2A");
-					printf("\n");
-
-					/* On empêche l'évolution au clic sur "Entrée"
-					lors du chargement de la nouvelle grille */
-					passerProchaineEvolution = 1;
+				} else if (e.xkey.keycode == 54) { // Touche c
+					// voisinnage cyclique / non-cyclique
+					if (comptageCyclique) { // On repasse à un comptage non-cyclique
+						comptageCyclique = 0;
+						compte_voisins_vivants = &(compte_voisins_vivants_non_cyclique);
+					} else { // On repasse à un comptage cyclique
+						comptageCyclique = 1;
+						compte_voisins_vivants = &(compte_voisins_vivants_cyclique);
+					}
+					// efface_grille_cairo();
+					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+				} else if (e.xkey.keycode == 55) { // Touche v
+					vieillissement = !vieillissement;
+				} else if (e.xkey.keycode == 40) {
+					system("doxygen && firefox ./doc/html/index.html");
+				} else if (e.xkey.keycode == 38) { // Touche q
+					return;
 				}
+				efface_grille_cairo();
 			}
 		}
 		return;
 	}
 
 	char c = getchar();
-	// char c;
-	// scanf("%c", &c);
 	while (c != 'q') // touche 'q' pour quitter
 	{
 		switch (c) {
@@ -354,8 +410,7 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 				break;
 			}
 		}
-		// c = getchar();
-		scanf("%c", &c);
+		c = getchar();
 	}
 	printf("A bientot !\n");
 	return;

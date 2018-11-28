@@ -8,9 +8,6 @@
 #include "io.h"
 #include "jeu.h"
 
-#define SIZEX 800
-#define SIZEY 800
-
 
 Display *dpy;
 Window rootwin;
@@ -36,12 +33,32 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y)
     /*da = XCreateSimpleWindow(dsp, DefaultRootWindow(dsp),
         0, 0, x, y, 0, 0, 0);*/
 
+	unsigned long background = 0x0031343f;
+	// da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
+	// 		WhitePixel(dsp, screen), WhitePixel(dsp, screen));
 	da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
-			WhitePixel(dsp, screen), WhitePixel(dsp, screen));
+			background, background);
     // XSelectInput(dsp, da, ButtonPressMask | KeyPressMask);
 	// XSelectInput(dsp, da, ExposureMask|ButtonPressMask);
 	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
     XMapWindow(dsp, da);
+
+
+	// void XSetWMName(display, w, text_prop)
+    //   Display *display;
+    //   Window w;
+    //   XTextProperty *text_prop;
+
+	// typedef struct {
+	// 	unsigned char *value;	/* property data */
+	// 	Atom encoding;		/* type of property */
+	// 	int format;		/* 8, 16, or 32 */
+	// 	unsigned long nitems;	/* number of items in value */
+	// } XTextProperty;
+
+	// XTextProperty textProp;
+	// textProp.value = "Name";
+	// XSetWMName(dsp, da, textProp);
 
 		//win=XCreateSimpleWindow(dpy, rootwin, 1, 1, SIZEX, SIZEY, 0, 
 				//BlackPixel(dpy, scr), BlackPixel(dpy, scr));
@@ -91,11 +108,7 @@ int main (int argc, char ** argv) {
 	if (useCairo) {
 
 
-		printf("Commandes du programme :\n");
-		printf("- n : Charger une nouvelle grille\n");
-		printf("- c : Passer en mode cyclique/non-cyclique\n");
-		printf("- v : Activer/desactiver le vieillissement\n");
-		printf("- q : Quitter le programme\n");
+		printf("=== Programme en cours d'execution ===\n\n");
 
 		sfc = cairo_create_x11_surface0(SIZEX, SIZEY);
 

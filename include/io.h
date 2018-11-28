@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include "grille.h"
 #include "jeu.h"
+#define SIZEX 900
+#define SIZEY 500
 
 /**
  * Affichage d'un trait horizontal
@@ -33,12 +35,14 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur);
  * @param[in] useCairo         Indique si l'on utilise Cairo (1) ou non (0)
  */
 void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo);
+void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo);
 
 /**
  * Effacement d'une grille
  * @param[in] g Grille à effacer
  */
 void efface_grille (grille g);
+void efface_grille_cairo ();
 
 /**
  * Débute le jeu
