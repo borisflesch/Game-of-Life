@@ -94,7 +94,6 @@ int main (int argc, char ** argv) {
 	grille g, gc;
 
 	char fichierGrille[100] = "grilles/grille";
-	// strcat(fichierGrille, "grilles/grille");
 	strcat(fichierGrille, argv[1]);
 	strcat(fichierGrille, ".txt");
 	initialisationErreur = init_grille_from_file(fichierGrille,&g);
@@ -109,28 +108,8 @@ int main (int argc, char ** argv) {
 
 
 		printf("=== Programme en cours d'execution ===\n\n");
-
-		sfc = cairo_create_x11_surface0(SIZEX, SIZEY);
-
-		// run the event loop
-		// while(1) {
-			// XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
-			// if (e.type==Expose && e.xexpose.count<1) {
-				// paint();
-				// affiche_grille(g, 1, 1, 0, useCairo);
-				
-				debut_jeu(&g, &gc, useCairo);
-			// } /* else if(e.type==ButtonPress) break; */
-
-			// printf("Expose is %d\n", Expose);
-			// printf("Got event: %d\n", e.type);
-
-			// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
-			// affiche_grille(g, 1, 1, 0, useCairo);
-
-			// debut_jeu(&g, &gc, useCairo);
-		// }
-
+		sfc = cairo_create_x11_surface0(SIZEX, SIZEY);		
+		debut_jeu(&g, &gc, useCairo);
 		cairo_close_x11_surface(sfc); // destroy cairo surface
 
 	} else {
@@ -142,7 +121,7 @@ int main (int argc, char ** argv) {
 		printf("- q : Quitter le programme\n");
 
 		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
-		affiche_grille(g, 1, 1, 0, useCairo);
+		affiche_grille(g, 1, 1, 0);
 
 		debut_jeu(&g, &gc, useCairo);
 

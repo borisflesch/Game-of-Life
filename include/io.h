@@ -34,8 +34,8 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur);
  * @param[in] vieillissement   Indique si le vieillissement est activé (1) ou désactivé (0)
  * @param[in] useCairo         Indique si l'on utilise Cairo (1) ou non (0)
  */
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo);
-void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo);
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement);
+void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement);
 
 /**
  * Effacement d'une grille

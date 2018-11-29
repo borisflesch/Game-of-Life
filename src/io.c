@@ -138,7 +138,7 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur){
 	return;
 }
 
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo){
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement){
 	int i, l=g.nbl, c=g.nbc;
 	printf("\n");
 	printf("\e[K");
@@ -159,7 +159,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	return;
 }
 
-void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int useCairo){
+void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, int vieillissement){
 	int i, l=g.nbl, c=g.nbc;
 	char strTemps[255], strComptageCyclique[255], strVieillissement[255];
 	sprintf(strTemps, "- Temps : %d", tempsEvolution);
@@ -171,11 +171,6 @@ void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, i
 	cr = cairo_create(sfc);
 
 	cairo_set_source_rgb(cr, 0.396078431372549, 0.6901960784313725, 0.9294117647058824);
-	// cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
-	// cairo_move_to(cr, 20.0, 550.0);
-	// cairo_line_to(cr, 20.0, 370.0);
-	
-	// cairo_set_source_rgb(cr, 0.1, 0.1, 0.1); 
 
 	cairo_select_font_face(cr, "Arial",
 		CAIRO_FONT_SLANT_NORMAL,
@@ -190,9 +185,8 @@ void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, i
 	cairo_move_to(cr, 500, 75);
 	cairo_show_text(cr, "Commandes :");
 
-	cairo_move_to(cr, 500, 240);
+	cairo_move_to(cr, 500, 265);
 	cairo_show_text(cr, "Informations :");
-
 
 	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 
@@ -201,34 +195,33 @@ void affiche_grille_cairo (grille g, int tempsEvolution, int comptageCyclique, i
 		CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr, 18);
 	cairo_move_to(cr, 500, 100);
-	cairo_show_text(cr, "- n : Charger une nouvelle grille");
+	cairo_show_text(cr, "- Entrée / clic gauche : Fait évoluer la grille");
+	cairo_set_font_size(cr, 18);
 	cairo_move_to(cr, 500, 125);
-	cairo_show_text(cr, "- c : Passer en mode cyclique/non-cyclique");
+	cairo_show_text(cr, "- n : Charger une nouvelle grille");
 	cairo_move_to(cr, 500, 150);
-	cairo_show_text(cr, "- v : Activer/desactiver le vieillissement");
+	cairo_show_text(cr, "- c : Passer en mode cyclique/non-cyclique");
 	cairo_move_to(cr, 500, 175);
-	cairo_show_text(cr, "- d : Ouvrir la doc (doxygen & firefox requis)");
+	cairo_show_text(cr, "- v : Activer/desactiver le vieillissement");
 	cairo_move_to(cr, 500, 200);
-	cairo_show_text(cr, "- q : Quitter le programme");
+	cairo_show_text(cr, "- d : Ouvrir la doc (doxygen & firefox requis)");
+	cairo_move_to(cr, 500, 225);
+	cairo_show_text(cr, "- q / clic droit : Quitter le programme");
 
-	cairo_move_to(cr, 500, 265);
-	cairo_show_text(cr, strTemps);
 	cairo_move_to(cr, 500, 290);
-	cairo_show_text(cr, strComptageCyclique);  
+	cairo_show_text(cr, strTemps);
 	cairo_move_to(cr, 500, 315);
+	cairo_show_text(cr, strComptageCyclique);  
+	cairo_move_to(cr, 500, 340);
 	cairo_show_text(cr, strVieillissement);  
 
-	// // cairo_move_to(cr, 20, 530);
-	// // cairo_show_text(cr, "very very interesting. I guess.");
 	cairo_destroy(cr);
-
 
 	int hauteur = 0;
 	affiche_trait_cairo(c, hauteur);
 	for (i=0; i<l; ++i) {
 		affiche_ligne_cairo(c, g.cellules[i], vieillissement, hauteur);
 		affiche_trait_cairo(c, ++hauteur);
-		//break;
 	}
 	return;
 }
@@ -256,34 +249,21 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
 
 	if (useCairo) {
+
+		int refreshGrille = 0;
 		
 		while(1) {
-			affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
 			XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
-			// printf("ev %d\n", e.type);
-			// if (e.type==Expose && e.xexpose.count<1) {
-			if (e.type == KeyPress) { // Touche pressée
-				// printf("keykey%d\n", e.xkey.keycode);
-				// return;
+			
+			if (e.type==Expose && e.xexpose.count<1) {
+				affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement);
+			} else if (e.type == KeyPress) { // Touche pressée
 				if (e.xkey.keycode == 36 || e.xkey.keycode == 104) { // Touche entrée (ou entrée numpad)
 					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
-					// efface_grille_cairo();
-					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+					refreshGrille = 1;
 				} else if (e.xkey.keycode == 57) { // Touche n
 
 					int erreurInitialisation = 0;
-
-					cairo_t *cr;
-					cr = cairo_create(sfc);
-					cairo_set_source_rgb (cr, 255.0, 255.0, 255.0);
-					cairo_select_font_face(cr, "Arial",
-						CAIRO_FONT_SLANT_NORMAL,
-						CAIRO_FONT_WEIGHT_NORMAL);
-					cairo_set_font_size(cr, 18);
-					// cairo_move_to(cr, SIZEX + 20, SIZEY - 20);
-					cairo_move_to(cr, 20, 20);
-					cairo_show_text(cr, "Merci d'indiquer la nouvelle grille à charger dans le terminal...");
-					cairo_destroy(cr);
 
 					libere_grille(g);
 					libere_grille(gc);
@@ -302,8 +282,7 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 
 					tempsEvolution = 1; // Réinitialisation du temps
 					alloue_grille (g->nbl, g->nbc, gc);
-					// efface_grille_cairo();
-					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+					refreshGrille = 1;
 
 				} else if (e.xkey.keycode == 54) { // Touche c
 					// voisinnage cyclique / non-cyclique
@@ -314,16 +293,28 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 						comptageCyclique = 1;
 						compte_voisins_vivants = &(compte_voisins_vivants_cyclique);
 					}
-					// efface_grille_cairo();
-					// affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+					refreshGrille = 1;
 				} else if (e.xkey.keycode == 55) { // Touche v
 					vieillissement = !vieillissement;
+					refreshGrille = 1;
 				} else if (e.xkey.keycode == 40) {
 					system("doxygen && firefox ./doc/html/index.html");
 				} else if (e.xkey.keycode == 38) { // Touche q
 					return;
 				}
+			} else if (e.type == ButtonPress) {
+				if (e.xbutton.button == 1) { // Clic gauche (fait évoluer le jeu)
+					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
+					refreshGrille = 1;
+				} else if (e.xbutton.button == 3) { // Clic droit (quitte le jeu)
+					return;
+				}
+			}
+
+			if (refreshGrille) {
 				efface_grille_cairo();
+				affiche_grille_cairo(*g, tempsEvolution, comptageCyclique, vieillissement);
+				refreshGrille = 0;
 			}
 		}
 		return;
@@ -340,7 +331,7 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 				} else {
 					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 					efface_grille(*g);
-					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
 				}
 				break;
 			}
@@ -365,7 +356,7 @@ void debut_jeu(grille *g, grille *gc, int useCairo){
 
 				tempsEvolution = 1; // Réinitialisation du temps
 				alloue_grille (g->nbl, g->nbc, gc);
-				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, useCairo);
+				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
 
 				printf("\n\e[2A");
 				printf("\n");
