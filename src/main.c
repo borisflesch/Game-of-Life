@@ -38,30 +38,21 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y)
 	// 		WhitePixel(dsp, screen), WhitePixel(dsp, screen));
 	da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
 			background, background);
-    // XSelectInput(dsp, da, ButtonPressMask | KeyPressMask);
-	// XSelectInput(dsp, da, ExposureMask|ButtonPressMask);
+
+	int length = 2 + 16 * 16 + 2 + 32 * 32;
+    XChangeProperty(dsp, rootwin, net_wm_icon, cardinal, 32,
+                     PropModeReplace, (const unsigned char*) buffer, length);
+
+	// XMapWindow(dsp, rootwin);
+
+	XChangeProperty( dsp, da,
+        XInternAtom(dsp, "_NET_WM_NAME", False),
+        XInternAtom(dsp, "UTF8_STRING", False),
+        8, PropModeReplace, (unsigned char *) buffer,
+        length);
+
 	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
     XMapWindow(dsp, da);
-
-
-	// void XSetWMName(display, w, text_prop)
-    //   Display *display;
-    //   Window w;
-    //   XTextProperty *text_prop;
-
-	// typedef struct {
-	// 	unsigned char *value;	/* property data */
-	// 	Atom encoding;		/* type of property */
-	// 	int format;		/* 8, 16, or 32 */
-	// 	unsigned long nitems;	/* number of items in value */
-	// } XTextProperty;
-
-	// XTextProperty textProp;
-	// textProp.value = "Name";
-	// XSetWMName(dsp, da, textProp);
-
-		//win=XCreateSimpleWindow(dpy, rootwin, 1, 1, SIZEX, SIZEY, 0, 
-				//BlackPixel(dpy, scr), BlackPixel(dpy, scr));
 
 	XStoreName(dsp, da, "Jeu de la vie");
 

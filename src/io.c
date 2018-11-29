@@ -26,7 +26,7 @@ void affiche_trait_cairo (int c, int hauteur){
 	float tailleLigneGrille = 30.;
 	cairo_t *cr;
 	cr = cairo_create(sfc);
-	// cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+	
 	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 	cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
 	
@@ -34,8 +34,6 @@ void affiche_trait_cairo (int c, int hauteur){
 
 	int i;
 	for (i = 0; i < c; ++i) {
-		// cairo_line_to(cr, i * 30.0 + 100.0, 20.0 + (hauteur * 30));
-		// cairo_move_to(cr, i * 30.0 + 100.0, 20.0 + (hauteur * 30));
 		cairo_line_to(cr, MARGE_GAUCHE_GRILLE + LARGEUR_GRILLE, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
 		cairo_move_to(cr, MARGE_GAUCHE_GRILLE, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
 	}
@@ -66,22 +64,12 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur){
 	int i;
 	char ageBuffer[255];
 	float tailleColonneGrille = (float) LARGEUR_GRILLE / (float) c;
-	// float tailleLigneGrille = (float) HAUTEUR_GRILLE / (float) hauteur;
 	float tailleLigneGrille = 30.;
-	// printf("%f\n\n", tailleColonneGrille);
-
-
-		// for (i=0; i<c; ++i) {
-		// 	if (ligne[i] == 0 ) printf ("|   ");
-		// 	else if (ligne[i] == -1) printf("| X "); // Non-viable
-		// 	else printf ("| %d ", ligne[i]);
-		// }
 
 	cairo_t *cr, *crcells;
 	cr = cairo_create(sfc);
 	crcells = cairo_create(sfc);
-	// cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
-	// cairo_set_source_rgb(crcells, 0.0, 0.0, 0.0);
+	
 	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 	cairo_set_source_rgb(crcells, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 	cairo_set_line_width(cr, CAIRO_LINE_WIDTH);
@@ -91,16 +79,13 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur){
 
 	for (i=0; i<c; ++i) {
 
-			// cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-			// cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
-
 		if (ligne[i] == 0) {
 			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
 			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
 			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
 		} else if (ligne[i] == -1) {
 			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
-			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
+			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + 1);
 			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + ((i+1) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
 			cairo_line_to(cr, MARGE_GAUCHE_GRILLE + i * tailleColonneGrille, MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille);
 			cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille), MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille));
@@ -115,7 +100,7 @@ void affiche_ligne_cairo (int c, int* ligne, int vieillissement, int hauteur){
 
 			if (vieillissement) {
 				sprintf(ageBuffer, "%d", ligne[i]);
-				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille) + tailleColonneGrille/3,
+				cairo_move_to(cr, MARGE_GAUCHE_GRILLE + ((i) * tailleColonneGrille) + tailleColonneGrille/2 - 3,
 				MARGE_HAUTE_GRILLE + (hauteur * tailleLigneGrille) + tailleLigneGrille*2/3);
 				cairo_set_source_rgb (cr, 0.19215686274509805, 0.20392156862745098, 0.24705882352941178);
 				cairo_select_font_face(cr, "Arial",
