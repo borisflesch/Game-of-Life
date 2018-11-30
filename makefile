@@ -5,8 +5,9 @@ IDIR = include
 ODIR = obj
 BDIR = bin
 SDIR = src
+LDIR = lib
 CPPFLAGS = -I/usr/include/cairo -Iinclude
-LDFLAGS = -lcairo -lm -lX11
+LDFLAGS = -lcairo -lm -lX11 -ljeu -L lib/
 MODE=CAIROGUI
 
 # Flags compilateur
@@ -19,7 +20,12 @@ vpath %.o $(ODIR)
 
 main: main.o jeu.o io.o grille.o
 	@mkdir -p $(BDIR)
-	$(CC) -DMODE$(MODE) $(CFLAGS) -o $(BDIR)/$@ $(ODIR)/main.o $(ODIR)/jeu.o $(ODIR)/io.o $(ODIR)/grille.o $(LDFLAGS)
+	@mkdir -p $(LDIR)
+
+	ar -crv $(LDIR)/libjeu.a $(ODIR)/jeu.o $(ODIR)/grille.o
+	ranlib $(LDIR)/libjeu.a
+
+	$(CC) -DMODE$(MODE) $(CFLAGS) -o $(BDIR)/$@ $(ODIR)/main.o $(ODIR)/io.o $(LDFLAGS)
 	@echo "\n=== Compilation terminée avec succès ==="
 	@echo "Lancez le programme avec ./bin/main <numéro de grille>"
 
@@ -36,6 +42,7 @@ dist:
 clean:
 	rm -f $(ODIR)/*.o
 	rm -f $(BDIR)/*
+	rm -f $(LDIR)/*.a
 	rm -rf dist/
 	rm -rf doc/
 	@echo "\n=== Artefacts de compilation éliminés avec succès ==="
