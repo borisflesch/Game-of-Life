@@ -90,15 +90,22 @@ void copie_grille (grille gs, grille gd);
 
 /**
  * Vérifie si les grilles sont égales
- * @param  g1   Première grille à comparer
- * @param  g2   Seconde grille
- * @return int  1 si égales, 0 sinon
+ * @param[in]  g1  Première grille à comparer
+ * @param[in]  g2  Seconde grille
+ * @return     int 1 si égales, 0 sinon
  */
 int grillesEgales(grille *g1, grille *g2);
 
 /**
+ * Vérifie si une grille est vide (<=> aucune cellule vivante)
+ * @param[in]  g   Grille à tester
+ * @return     int 1 si vide, 0 sinon
+ */
+int grilleVide(grille *g);
+
+/**
  * Vérifie si les grilles sont égales
- * @param      g                      Grille à tester
+ * @param[in]  g                      Grille à tester
  * @param[in]  compte_voisins_vivants Pointeur sur une fonction de comptage des voisins vivants d'une cellule
  * @param[in]  vieillissement         Indique si le vieillissement est activé (1) ou non (0)
  * @return int                        Temps d'une période (en pas de temps), sinon 0 (si la grille n'est pas oscillante)

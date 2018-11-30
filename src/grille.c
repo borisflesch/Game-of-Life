@@ -77,23 +77,52 @@ int grillesEgales(grille *g1, grille *g2) {
 	return 1;
 }
 
+int grilleVide(grille *g) {
+	int i, j;
+	for (i = 0; i < g->nbl; i++) {
+		for (j = 0; j < g->nbc; j++) {
+			if (g->cellules[i][j] > 0) {
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
 int grilleOscillante(grille *g, int (*compte_voisins_vivants) (int, int, grille), int vieillissement) {
 	int tempsEvolutionOscillation = 0;
-	grille copie, tmp;
-	alloue_grille (g->nbl, g->nbc, &copie);
-	copie_grille(*g, copie);
+	grille copieInitiale, copieIteree, tmp;
+	alloue_grille (g->nbl, g->nbc, &copieInitiale);
+	copie_grille(*g, copieInitiale);
+
+	alloue_grille (g->nbl, g->nbc, &copieIteree);
+	copie_grille(*g, copieIteree);
 
 	alloue_grille (g->nbl, g->nbc, &tmp);
 	copie_grille(*g, tmp);
 
 	int maxInterval = 1000; // On suppose qu'au-delà de 1000 évolutions, une grille ne peut pas être oscillante
 
-	while (tempsEvolutionOscillation < maxInterval) {
-		evolue(&copie,&tmp,&tempsEvolutionOscillation,compte_voisins_vivants,vieillissement); // Met à jour tempsEvolutionOscillation
-		if (grillesEgales(g, &copie)) {
-			return tempsEvolutionOscillation;
+	int maxDelais = 100; // On suppose qu'au-delà de 100 évolutions, il ne peut plus y avoir de comportement oscillatoire
+	int i = 0;
+	 do {
+		while (tempsEvolutionOscillation < maxInterval) {
+			evolue(&copieIteree,&tmp,&tempsEvolutionOscillation,compte_voisins_vivants,vieillissement); // Met à jour tempsEvolutionOscillation
+			if (grilleVide(&copieInitiale)) {
+				return 0;
+			}
+			if (grillesEgales(&copieInitiale, &copieIteree)) {
+				return tempsEvolutionOscillation;
+			}
 		}
-	}
+
+		evolue(&copieInitiale,&tmp,&tempsEvolutionOscillation,compte_voisins_vivants,vieillissement);
+		tempsEvolutionOscillation = 0; // Réinitialisation du temps d'une oscillation
+		i++;
+	} while (i < maxDelais);
+
+
+	
 
 	return 0;
 }

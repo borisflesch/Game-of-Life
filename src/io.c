@@ -297,7 +297,14 @@ void debut_jeu(grille *g, grille *gc) {
 			} else if (e.xkey.keycode == 40) {
 				system("doxygen && firefox ./doc/html/index.html");
 			} else if (e.xkey.keycode == 32) { // Touche o (oscillation)
-				tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
+				// int max = 1000;
+				// int i = 0;
+				// do {
+					tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
+					// evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
+					// i++;
+				// } while (tempsOscillation < 1 && i < max);
+				
 				refreshGrille = 1;
 			} else if (e.xkey.keycode == 38) { // Touche q
 				endGame = 1;
