@@ -38,8 +38,11 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y) {
 	da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
 			background, background);
 
-	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask|StructureNotifyMask);
+	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
     XMapWindow(dsp, da);
+
+	Atom wm_delete_window = XInternAtom(dsp, "WM_DELETE_WINDOW", False); 
+    XSetWMProtocols(dsp, da, &wm_delete_window, 1);
 
 	XStoreName(dsp, da, "Jeu de la vie");
 
@@ -281,8 +284,10 @@ void debut_jeu(grille *g, grille *gc) {
 			} else if (e.xbutton.button == 3) { // Clic droit (quitte le jeu)
 				return;
 			}
-		} else if (e.type == DestroyNotify) {
-			printf("Window killed :'(\n");
+		} else if (e.type == ClientMessage) {
+			// Le seul msg qu'on peut recevoir est celui de fermeture : test non nécessaire
+			printf("=== Fin du programme. A bientot ! ===\n");
+			return;
 		}
 
 		if (refreshGrille) {
