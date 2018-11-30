@@ -8,74 +8,11 @@
 #include "io.h"
 #include "jeu.h"
 
-
-Display *dpy;
-Window rootwin;
-Window win;
-XEvent e;
-int scr;
 cairo_surface_t *sfc;
 
 
-cairo_surface_t *cairo_create_x11_surface0(int x, int y)
-{
-    Display *dsp;
-    Drawable da;
-    int screen;
-    cairo_surface_t *sfc;
-
-    if ((dsp = XOpenDisplay(NULL)) == NULL) {
-		fprintf(stderr, "ERROR: Could not open display\n");
-        exit(1);
-	}
-    screen = DefaultScreen(dsp);
-	rootwin = RootWindow(dsp, screen);
-    /*da = XCreateSimpleWindow(dsp, DefaultRootWindow(dsp),
-        0, 0, x, y, 0, 0, 0);*/
-
-	unsigned long background = 0x0031343f;
-	// da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
-	// 		WhitePixel(dsp, screen), WhitePixel(dsp, screen));
-	da=XCreateSimpleWindow(dsp, rootwin, 1, 1, x, y, 0, 
-			background, background);
-
-	int length = 2 + 16 * 16 + 2 + 32 * 32;
-    XChangeProperty(dsp, rootwin, net_wm_icon, cardinal, 32,
-                     PropModeReplace, (const unsigned char*) buffer, length);
-
-	// XMapWindow(dsp, rootwin);
-
-	XChangeProperty( dsp, da,
-        XInternAtom(dsp, "_NET_WM_NAME", False),
-        XInternAtom(dsp, "UTF8_STRING", False),
-        8, PropModeReplace, (unsigned char *) buffer,
-        length);
-
-	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
-    XMapWindow(dsp, da);
-
-	XStoreName(dsp, da, "Jeu de la vie");
-
-    sfc = cairo_xlib_surface_create(dsp, da,
-        DefaultVisual(dsp, screen), x, y);
-    cairo_xlib_surface_set_size(sfc, x, y);
-
-    return sfc;
-}
-
-/*! Destroy cairo Xlib surface and close X connection.
- */
-void cairo_close_x11_surface(cairo_surface_t *sfc)
-{
-   Display *dsp = cairo_xlib_surface_get_display(sfc);
-
-   cairo_surface_destroy(sfc);
-   XCloseDisplay(dsp);
-}
-
 int main (int argc, char ** argv) {
 	int initialisationErreur = 0;
-	int useCairo = 1;
 
 	if (argc != 2 ) {
 		printf("usage : main <numero de la grille>\n");
@@ -95,16 +32,24 @@ int main (int argc, char ** argv) {
 
 	alloue_grille (g.nbl, g.nbc, &gc);
 
-	if (useCairo) {
-
+	#if MODECAIROGUI
+		/*
+		=====================
+		=== CAIRO VERSION ===
+		=====================
+		*/
 
 		printf("=== Programme en cours d'execution ===\n\n");
 		sfc = cairo_create_x11_surface0(SIZEX, SIZEY);		
-		debut_jeu(&g, &gc, useCairo);
+		debut_jeu(&g, &gc);
 		cairo_close_x11_surface(sfc); // destroy cairo surface
 
-	} else {
-
+	#else
+		/*
+		====================
+		=== TEXT VERSION ===
+		====================
+		*/
 		printf("Commandes du programme :\n");
 		printf("- n : Charger une nouvelle grille\n");
 		printf("- c : Passer en mode cyclique/non-cyclique\n");
@@ -114,9 +59,9 @@ int main (int argc, char ** argv) {
 		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
 		affiche_grille(g, 1, 1, 0);
 
-		debut_jeu(&g, &gc, useCairo);
+		debut_jeu(&g, &gc);
 
-	}
+	#endif
 
 	libere_grille(&g);
 	libere_grille(&gc);

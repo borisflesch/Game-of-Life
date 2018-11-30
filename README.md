@@ -26,6 +26,14 @@ Commandes importantes
 make
 ~~~
 Le fichier exécutable se trouve au chemin suivant : /bin/main
+Par défaut, le programme est compilé en mode graphique (Cairo et X requis).
+
+Pour compiler en mode texte :
+~~~{.sh}
+make MODE=TEXT
+~~~
+
+**ATTENTION :** Il est impératif de nettoyer les artefacts de compilation en passant du mode textuel au mode graphique et vice versa.
 
 ### Exécuter le programme
 
@@ -114,7 +122,7 @@ Les versions **v0.x** sont des versions stables du projet dans lesquelles « x �
 Des versions **v0.x.y** peuvent exister entre les niveaux, auquel cas « x » représente toujours le dernier niveau finalisé et « y » représente la dernière question terminée dans le niveau suivant. Néamoins, ces versions sont susceptibles de contenir des bugs ou **anomalies**. Il est donc préférable de les manipuler avec **précaution** et de se référer aux **v0.x pour des versions stables**.
 
 ### Journal des versions
-
+- v0.4 : Niveau 4 finalisé (GUI)
 - v0.3 : Niveau 3 finalisé
 - v0.2 : Niveau 2 finalisé
 - v0.1.2 : Question 2 du niveau 2 terminée
