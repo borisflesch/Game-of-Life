@@ -170,7 +170,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 
 	cairo_set_font_size(cr, 26);
 	cairo_move_to(cr, 20, 40);
-	cairo_show_text(cr, "Conway's Game of Life");
+	cairo_show_text(cr, "Jeu de la vie (Conway)");
 
 	cairo_set_font_size(cr, 22);
 	cairo_move_to(cr, 500, 80);
