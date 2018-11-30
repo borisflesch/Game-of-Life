@@ -88,4 +88,22 @@ static inline int est_non_viable(int i, int j, grille g){return g.cellules[i][j]
  */
 void copie_grille (grille gs, grille gd);
 
+/**
+ * Vérifie si les grilles sont égales
+ * @param  g1   Première grille à comparer
+ * @param  g2   Seconde grille
+ * @return int  1 si égales, 0 sinon
+ */
+int grillesEgales(grille *g1, grille *g2);
+
+/**
+ * Vérifie si les grilles sont égales
+ * @param      g                      Grille à tester
+ * @param[in]  compte_voisins_vivants Pointeur sur une fonction de comptage des voisins vivants d'une cellule
+ * @param[in]  vieillissement         Indique si le vieillissement est activé (1) ou non (0)
+ * @return int                        Temps d'une période (en pas de temps), sinon 0 (si la grille n'est pas oscillante)
+ */
+int grilleOscillante(grille *g, int (*compte_voisins_vivants) (int, int, grille), int vieillissement);
+
+
 #endif

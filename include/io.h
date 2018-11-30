@@ -65,15 +65,6 @@
     void affiche_ligne (int c, int* ligne, int vieillissement);
 
     /**
-     * Affichage d'une grille
-     * @param[in] g                Grille à afficher
-     * @param[in] tempsEvolution   Entier représentant le temps (pas) d'évolution de la grille en cours
-     * @param[in] comptageCyclique Indique si le comptage est en mode cyclique (1) ou non-cyclique (0)
-     * @param[in] vieillissement   Indique si le vieillissement est activé (1) ou désactivé (0)
-     */
-    void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement);
-
-    /**
      * Effacement d'une grille
      * @param[in] g Grille à effacer
      */
@@ -87,5 +78,16 @@
  * @param[in,out] gc Pointeur sur la seconde grille allouée aux mêmes nombres de lignes et colonnes que la première et qui permettra plus tard l'évolution de la grille de g vers gc
  */
 void debut_jeu(grille *g, grille *gc);
+
+
+/**
+ * Affichage d'une grille
+ * @param[in] g                  Grille à afficher
+ * @param[in] tempsEvolution     Entier représentant le temps (pas) d'évolution de la grille en cours
+ * @param[in] comptageCyclique   Indique si le comptage est en mode cyclique (1) ou non-cyclique (0)
+ * @param[in] vieillissement     Indique si le vieillissement est activé (1) ou désactivé (0)
+ * @param[in] tempsOscillation   Indique le temps d'oscillation d'une grille (ou -1 si non testé ou 0 si non oscillante)
+ */
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int tempsOscillation);
 
 #endif

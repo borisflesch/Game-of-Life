@@ -151,12 +151,20 @@ void affiche_trait (int c, int hauteur, float tailleLigneGrille){
 	cairo_destroy(cr);
 }
 
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement){
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int tempsOscillation){
 	int i, l=g.nbl, c=g.nbc;
-	char strTemps[255], strComptageCyclique[255], strVieillissement[255];
+	char strTemps[255], strComptageCyclique[255], strVieillissement[255], strOscillation[255];
 	sprintf(strTemps, "- Temps : %d", tempsEvolution);
 	sprintf(strComptageCyclique, comptageCyclique ? "- Comptage : Cyclique" : "- Comptage : Non-cyclique");
 	sprintf(strVieillissement, vieillissement ? "- Vieillissement : Active" : "- Vieillissement : Desactive");
+
+	if (tempsOscillation == -1) {
+		sprintf(strOscillation, "- Oscillation : Non testee");
+	} else if (tempsOscillation == 0) {
+		sprintf(strOscillation, "- Oscillation : Grille non oscillante");
+	} else {
+		sprintf(strOscillation, "- Oscillation : %d pas de temps par période", tempsOscillation);
+	}
 
 
 	cairo_t *cr;
@@ -177,7 +185,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	cairo_move_to(cr, 500, 75);
 	cairo_show_text(cr, "Commandes :");
 
-	cairo_move_to(cr, 500, 265);
+	cairo_move_to(cr, 500, 290);
 	cairo_show_text(cr, "Informations :");
 
 	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
@@ -193,16 +201,20 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	cairo_move_to(cr, 500, 175);
 	cairo_show_text(cr, "- v : Activer/desactiver le vieillissement");
 	cairo_move_to(cr, 500, 200);
-	cairo_show_text(cr, "- d : Ouvrir la doc (doxygen & firefox requis)");
+	cairo_show_text(cr, "- o : Tester si la grille est oscillante");
 	cairo_move_to(cr, 500, 225);
+	cairo_show_text(cr, "- d : Ouvrir la doc (doxygen & firefox requis)");
+	cairo_move_to(cr, 500, 250);
 	cairo_show_text(cr, "- q / clic droit : Quitter le programme");
 
-	cairo_move_to(cr, 500, 290);
-	cairo_show_text(cr, strTemps);
 	cairo_move_to(cr, 500, 315);
-	cairo_show_text(cr, strComptageCyclique);  
+	cairo_show_text(cr, strTemps);
 	cairo_move_to(cr, 500, 340);
+	cairo_show_text(cr, strComptageCyclique);  
+	cairo_move_to(cr, 500, 365);
 	cairo_show_text(cr, strVieillissement);  
+	cairo_move_to(cr, 500, 390);
+	cairo_show_text(cr, strOscillation);  
 
 	cairo_destroy(cr);
 
@@ -229,6 +241,7 @@ void debut_jeu(grille *g, grille *gc) {
 	int vieillissement = 0;
 	int refreshGrille = 0;
 	int endGame = 0;
+	int tempsOscillation = -1; // -1 par défaut => oscillation non testée
 
 	int comptageCyclique = 1;
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
@@ -239,7 +252,7 @@ void debut_jeu(grille *g, grille *gc) {
 		XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
 		
 		if (e.type==Expose && e.xexpose.count<1) {
-			affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+			affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, tempsOscillation);
 		} else if (e.type == KeyPress) { // Touche pressée
 			if (e.xkey.keycode == 36 || e.xkey.keycode == 104) { // Touche entrée (ou entrée numpad)
 				evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
@@ -264,6 +277,7 @@ void debut_jeu(grille *g, grille *gc) {
 				} while (erreurInitialisation);
 
 				tempsEvolution = 1; // Réinitialisation du temps
+				tempsOscillation = -1; // Réinitialisation de l'oscillation
 				alloue_grille (g->nbl, g->nbc, gc);
 				refreshGrille = 1;
 
@@ -282,6 +296,9 @@ void debut_jeu(grille *g, grille *gc) {
 				refreshGrille = 1;
 			} else if (e.xkey.keycode == 40) {
 				system("doxygen && firefox ./doc/html/index.html");
+			} else if (e.xkey.keycode == 32) { // Touche o (oscillation)
+				tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
+				refreshGrille = 1;
 			} else if (e.xkey.keycode == 38) { // Touche q
 				endGame = 1;
 			}
@@ -304,7 +321,7 @@ void debut_jeu(grille *g, grille *gc) {
 
 		if (refreshGrille) {
 			efface_grille();
-			affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+			affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, tempsOscillation);
 			refreshGrille = 0;
 		}
 	}
