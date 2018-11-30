@@ -1,7 +1,7 @@
 # Projet : Game of Life
 
 ![Build Status](https://semaphoreapp.com/api/v1/projects/d4cca506-99be-44d2-b19e-176f36ec8cf1/128505/shields_badge.svg)
-![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.3&x2=0)
+![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.4&x2=0)
 
 Ce [dépôt](https://git.unistra.fr/bflesch/Projet-Game-of-Life) contient l'intégralité du projet du cours de Techniques de Développement intitulé « Game of Life ».
 
