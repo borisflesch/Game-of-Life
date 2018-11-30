@@ -47,9 +47,12 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y) {
 	XStoreName(dsp, da, "Jeu de la vie");
 
 	classHint = XAllocClassHint();
-	classHint->res_name = "Jeu de la vie";
-	classHint->res_class = "Jeu de la vie";
-	XSetClassHint(dsp, da, classHint);
+	if (classHint) {
+		classHint->res_name = "Jeu de la vie";
+		classHint->res_class = "Jeu de la vie";
+		XSetClassHint(dsp, da, classHint);
+		XFree(classHint);
+	}
 
 	Atom wm_delete_window = XInternAtom(dsp, "WM_DELETE_WINDOW", False); 
     XSetWMProtocols(dsp, da, &wm_delete_window, 1);
@@ -61,11 +64,10 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y) {
     return sfc;
 }
 
-void cairo_close_x11_surface(cairo_surface_t *sfc) {
+void cairo_close_x11_surface() {
    Display *dsp = cairo_xlib_surface_get_display(sfc);
    cairo_surface_destroy(sfc);
    XCloseDisplay(dsp);
-   XFree(classHint);
 }
 
 void affiche_ligne (int c, int* ligne, int vieillissement, int hauteur, float tailleLigneGrille){
@@ -126,6 +128,7 @@ void affiche_ligne (int c, int* ligne, int vieillissement, int hauteur, float ta
 	cairo_fill(crcells);
 	cairo_stroke(cr);
 	cairo_destroy(cr);
+	cairo_destroy(crcells);
 		
 	return;
 }
@@ -179,9 +182,6 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 
 	cairo_set_source_rgb(cr, 0.6666666666666666, 0.6901960784313725, 0.7254901960784313);
 
-	cairo_select_font_face(cr, "Arial",
-		CAIRO_FONT_SLANT_NORMAL,
-		CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr, 18);
 	cairo_move_to(cr, 500, 100);
 	cairo_show_text(cr, "- Entrée / clic gauche : Fait évoluer la grille");

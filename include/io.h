@@ -22,9 +22,8 @@
 
     /**
      * Destruction d'une surface Xlib Cairo et fermeture de la connexion à X
-     * @param[in] sfc Surface Cairo à détruire
      */
-    void cairo_close_x11_surface(cairo_surface_t *sfc);
+    void cairo_close_x11_surface();
 
     /**
      * Affichage d'un trait horizontal
