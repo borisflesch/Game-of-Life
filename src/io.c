@@ -2,6 +2,7 @@
 #include <cairo.h>
 #include <cairo-xlib.h>
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #include "io.h"
 
@@ -19,6 +20,7 @@
 #define CAIRO_LINE_WIDTH 2
 
 extern cairo_surface_t *sfc;
+XClassHint *classHint;
 
 cairo_surface_t *cairo_create_x11_surface0(int x, int y) {
     Display *dsp;
@@ -41,10 +43,16 @@ cairo_surface_t *cairo_create_x11_surface0(int x, int y) {
 	XSelectInput(dsp, da, ExposureMask|ButtonPressMask|KeyPressMask);
     XMapWindow(dsp, da);
 
-	Atom wm_delete_window = XInternAtom(dsp, "WM_DELETE_WINDOW", False); 
-    XSetWMProtocols(dsp, da, &wm_delete_window, 1);
 
 	XStoreName(dsp, da, "Jeu de la vie");
+
+	classHint = XAllocClassHint();
+	classHint->res_name = "Jeu de la vie";
+	classHint->res_class = "Jeu de la vie";
+	XSetClassHint(dsp, da, classHint);
+
+	Atom wm_delete_window = XInternAtom(dsp, "WM_DELETE_WINDOW", False); 
+    XSetWMProtocols(dsp, da, &wm_delete_window, 1);
 
     sfc = cairo_xlib_surface_create(dsp, da,
         DefaultVisual(dsp, screen), x, y);
@@ -57,6 +65,7 @@ void cairo_close_x11_surface(cairo_surface_t *sfc) {
    Display *dsp = cairo_xlib_surface_get_display(sfc);
    cairo_surface_destroy(sfc);
    XCloseDisplay(dsp);
+   XFree(classHint);
 }
 
 void affiche_ligne (int c, int* ligne, int vieillissement, int hauteur, float tailleLigneGrille){
@@ -217,15 +226,14 @@ void efface_grille () {
 
 void debut_jeu(grille *g, grille *gc) {
 	int tempsEvolution = 1;
-
 	int vieillissement = 0;
+	int refreshGrille = 0;
+	int endGame = 0;
 
 	int comptageCyclique = 1;
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
 
 	XEvent e;
-
-	int refreshGrille = 0;
 	
 	while(1) {
 		XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
@@ -275,17 +283,21 @@ void debut_jeu(grille *g, grille *gc) {
 			} else if (e.xkey.keycode == 40) {
 				system("doxygen && firefox ./doc/html/index.html");
 			} else if (e.xkey.keycode == 38) { // Touche q
-				return;
+				endGame = 1;
 			}
 		} else if (e.type == ButtonPress) {
 			if (e.xbutton.button == 1) { // Clic gauche (fait évoluer le jeu)
 				evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 				refreshGrille = 1;
 			} else if (e.xbutton.button == 3) { // Clic droit (quitte le jeu)
-				return;
+				endGame = 1;
 			}
 		} else if (e.type == ClientMessage) {
 			// Le seul msg qu'on peut recevoir est celui de fermeture : test non nécessaire
+			endGame = 1;
+		}
+
+		if (endGame) {
 			printf("=== Fin du programme. A bientot ! ===\n");
 			return;
 		}
