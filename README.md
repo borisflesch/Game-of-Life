@@ -39,12 +39,14 @@ make MODE=TEXT
 ### Exécuter le programme
 
 ~~~{.sh}
-./bin/make <chemin vers une grille>
+./bin/make <numéro de la grille à charger>
 ~~~
+
+Les grilles se trouvent dans le répertoire /grilles/ et ont comme nom de fichier "grilleX.txt", X indiquant le numéro de la grille.
 
 Exemple :
 ~~~{.sh}
-./bin/make "grilles/grille3.txt"
+./bin/make 3
 ~~~
 
 ### Générer la documentation (Doxygen)
