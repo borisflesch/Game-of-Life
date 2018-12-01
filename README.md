@@ -31,7 +31,7 @@ Par défaut, le programme est compilé en mode graphique (Cairo et X requis).
 
 Pour compiler en mode texte :
 ~~~{.sh}
-make MODE=TEXT
+make MODE=TEXTE
 ~~~
 
 **ATTENTION :** Il est impératif de nettoyer les artefacts de compilation en passant du mode textuel au mode graphique et vice versa.

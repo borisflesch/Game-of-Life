@@ -454,7 +454,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	printf(" | ");
 	printf("Vieillissement : ");
 	vieillissement ? printf("Active") : printf("Desactive");
-	printf("\n | ");
+	printf("\n\e[K | ");
 	printf("Oscillation : ");
 	if (tempsOscillation == -1) {
 		printf("Non testee");
