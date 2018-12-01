@@ -117,6 +117,7 @@ int grilleOscillante(grille *g, int (*compte_voisins_vivants) (int, int, grille)
 		}
 
 		evolue(&copieInitiale,&tmp,&tempsEvolutionOscillation,compte_voisins_vivants,vieillissement);
+		copie_grille(copieInitiale, copieIteree);
 		tempsEvolutionOscillation = 0; // Réinitialisation du temps d'une oscillation
 		i++;
 	} while (i < maxDelais);

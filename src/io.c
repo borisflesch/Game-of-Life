@@ -297,14 +297,7 @@ void debut_jeu(grille *g, grille *gc) {
 			} else if (e.xkey.keycode == 40) {
 				system("doxygen && firefox ./doc/html/index.html");
 			} else if (e.xkey.keycode == 32) { // Touche o (oscillation)
-				// int max = 1000;
-				// int i = 0;
-				// do {
-					tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
-					// evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
-					// i++;
-				// } while (tempsOscillation < 1 && i < max);
-				
+				tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
 				refreshGrille = 1;
 			} else if (e.xkey.keycode == 38) { // Touche q
 				endGame = 1;
@@ -370,7 +363,7 @@ void affiche_ligne (int c, int* ligne, int vieillissement) {
 	return;
 }
 
-void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement){
+void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vieillissement, int tempsOscillation){
 	int i, l=g.nbl, c=g.nbc;
 	printf("\n");
 	printf("\e[K");
@@ -380,6 +373,15 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	printf(" | ");
 	printf("Vieillissement : ");
 	vieillissement ? printf("Active") : printf("Desactive");
+	printf("\n | ");
+	printf("Oscillation : ");
+	if (tempsOscillation == -1) {
+		printf("Non testee");
+	} else if (tempsOscillation == 0) {
+		printf("Grille non oscillante");
+	} else {
+		printf("%d pas de temps par oscillation", tempsOscillation);
+	}
 
 	printf("\n\n");
 	affiche_trait(c);
@@ -392,7 +394,7 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 }
 
 void efface_grille (grille g){
-	printf("\n\e[%dA",g.nbl*2 + 7);
+	printf("\n\e[%dA",g.nbl*2 + 8);
 }
 
 void debut_jeu(grille *g, grille *gc){
@@ -401,6 +403,7 @@ void debut_jeu(grille *g, grille *gc){
 	int passerProchaineEvolution = 0;
 
 	int vieillissement = 0;
+	int tempsOscillation = -1; // -1 par défaut => oscillation non testée
 
 	int comptageCyclique = 1;
 	int (*compte_voisins_vivants) (int, int, grille) = compte_voisins_vivants_cyclique;
@@ -416,7 +419,7 @@ void debut_jeu(grille *g, grille *gc){
 				} else {
 					evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 					efface_grille(*g);
-					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+					affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, tempsOscillation);
 				}
 				break;
 			}
@@ -440,8 +443,9 @@ void debut_jeu(grille *g, grille *gc){
 				} while (erreurInitialisation);
 
 				tempsEvolution = 1; // Réinitialisation du temps
+				tempsOscillation = -1; // Réinitialisation du temps d'oscillation
 				alloue_grille (g->nbl, g->nbc, gc);
-				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement);
+				affiche_grille(*g, tempsEvolution, comptageCyclique, vieillissement, tempsOscillation);
 
 				printf("\n\e[2A");
 				printf("\n");
@@ -462,6 +466,16 @@ void debut_jeu(grille *g, grille *gc){
 					comptageCyclique = 1;
 					compte_voisins_vivants = &(compte_voisins_vivants_cyclique);
 				}
+
+				printf("\e[A");
+				printf("\e[K");
+				printf("\n");
+				break;
+			}
+			case 'o' :
+			{
+				// test de l'oscillation
+				tempsOscillation = grilleOscillante(g, compte_voisins_vivants, vieillissement);
 
 				printf("\e[A");
 				printf("\e[K");

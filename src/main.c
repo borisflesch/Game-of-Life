@@ -56,8 +56,8 @@ int main (int argc, char ** argv) {
 		printf("- v : Activer/desactiver le vieillissement\n");
 		printf("- q : Quitter le programme\n");
 
-		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé)
-		affiche_grille(g, 1, 1, 0);
+		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé), Oscillation => -1 (non testée)
+		affiche_grille(g, 1, 1, 0, -1);
 
 		debut_jeu(&g, &gc);
 
