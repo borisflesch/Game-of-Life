@@ -35,7 +35,7 @@ main: main.o jeu.o io.o grille.o
 
 dist:
 	@mkdir -p dist
-	tar -J -cvf dist/FleschBoris-GoL-v0.5.tar.xz grilles include src makefile Doxyfile
+	tar -J -cvf dist/FleschBoris-GoL-v0.5.tar.xz grilles include src makefile Doxyfile README.md
 	@echo "\n=== Archive créée avec succès ==="
 	@echo "Chemin relatif de l'archive : dist/FleschBoris-GoL-v0.5.tar.xz"
 
