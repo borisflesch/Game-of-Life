@@ -26,7 +26,7 @@
     void cairo_close_x11_surface();
 
     /**
-     * Affichage d'un trait horizontal
+     * Affichage d'un trait horizontal (en mode GUI Cairo)
      * @param[in] c           Nombre de cellules du trait
      * @param[in] hauteur     Numéro de la hauteur du trait à tracer (en partant du haut de la grille)
      * @param[in] tailleLigne Hauteur de la ligne (en pixels)
@@ -34,7 +34,7 @@
     void affiche_trait (int c, int hauteur, float tailleLigne);
 
     /**
-     * Affichage d'une ligne de la grille
+     * Affichage d'une ligne de la grille (en mode GUI Cairo)
      * @param[in] c              Nombre de cellules de la ligne
      * @param[in] ligne          Tableau indiquant pour chaque cellule si elle est vivante ou morte
      * @param[in] vieillissement Indique si le vieillissement est activé (1) ou désactivé (0)
@@ -44,20 +44,20 @@
     void affiche_ligne (int c, int* ligne, int vieillissement, int hauteur, float tailleLigne);
 
     /**
-     * Effacement de la grille sur l'interface graphique
+     * Effacement de la grille sur l'interface graphique (en mode GUI Cairo)
      */
     void efface_grille ();
 
 #else
 
     /**
-     * Affichage d'un trait horizontal
+     * Affichage d'un trait horizontal (en mode Texte)
      * @param[in] c Nombre de cellules du trait
      */
     void affiche_trait (int c);
 
     /**
-     * Affichage d'une ligne de la grille
+     * Affichage d'une ligne de la grille (en mode Texte)
      * @param[in] c              Nombre de cellules de la ligne
      * @param[in] ligne          Tableau indiquant pour chaque cellule si elle est vivante ou morte
      * @param[in] vieillissement Indique si le vieillissement est activé (1) ou désactivé (0)
@@ -65,7 +65,7 @@
     void affiche_ligne (int c, int* ligne, int vieillissement);
 
     /**
-     * Effacement d'une grille
+     * Effacement d'une grille (en mode Texte)
      * @param[in] g Grille à effacer
      */
     void efface_grille (grille g);
