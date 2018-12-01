@@ -54,6 +54,7 @@ int main (int argc, char ** argv) {
 		printf("- n : Charger une nouvelle grille\n");
 		printf("- c : Passer en mode cyclique/non-cyclique\n");
 		printf("- v : Activer/desactiver le vieillissement\n");
+		printf("- o : Tester si la grille est oscillante\n");
 		printf("- q : Quitter le programme\n");
 
 		// Par défaut : Temps initial => 1, Comptage cyclique => 1 (oui), Vieillissement => 0 (désactivé), Oscillation => -1 (non testée)
