@@ -1,12 +1,12 @@
 # Projet : Game of Life
 
 ![Build Status](https://semaphoreapp.com/api/v1/projects/d4cca506-99be-44d2-b19e-176f36ec8cf1/128505/shields_badge.svg)
-![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.4&x2=0)
+![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.5&x2=0)
 
 Ce [dépôt](https://git.unistra.fr/bflesch/Projet-Game-of-Life) contient l'intégralité du projet du cours de Techniques de Développement intitulé « Game of Life ».
 
 
-![](https://fboris.com/documents/project-game-of-life-techdev/preview.gif)
+![](https://fboris.com/documents/project-game-of-life-techdev/preview-gui.gif)
 
 
 Structure des fichiers
@@ -14,6 +14,7 @@ Structure des fichiers
 
 - / racine
 	- src/ contient toutes les sources (*.c)
+	- lib/ contient les librairies (*.a)
 	- include/ contient toutes les en-têtes de fonctions et structures du programme (*.h)
 	- grilles/ contient l'ensemble des grilles disponibles
 
@@ -122,6 +123,7 @@ Les versions **v0.x** sont des versions stables du projet dans lesquelles « x �
 Des versions **v0.x.y** peuvent exister entre les niveaux, auquel cas « x » représente toujours le dernier niveau finalisé et « y » représente la dernière question terminée dans le niveau suivant. Néamoins, ces versions sont susceptibles de contenir des bugs ou **anomalies**. Il est donc préférable de les manipuler avec **précaution** et de se référer aux **v0.x pour des versions stables**.
 
 ### Journal des versions
+- v0.5 : Niveau 5
 - v0.4 : Niveau 4 finalisé (GUI)
 - v0.3 : Niveau 3 finalisé
 - v0.2 : Niveau 2 finalisé
