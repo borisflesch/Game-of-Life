@@ -35,6 +35,7 @@ make MODE=TEXT
 ~~~
 
 **ATTENTION :** Il est impératif de nettoyer les artefacts de compilation en passant du mode textuel au mode graphique et vice versa.
+**ATTENTION #2 :** En mode graphique, les commandes correspondent à un format de clavier AZERTY. Il faudra donc, par exemple, avec un clavier QWERTY, appuyer sur "a" pour quitter le programme (le "a" d'un clavier QWERTY étant à l'emplacement du "q" sur un clavier AZERTY).
 
 ### Exécuter le programme
 
