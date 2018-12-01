@@ -123,7 +123,7 @@ Les versions **v0.x** sont des versions stables du projet dans lesquelles « x �
 Des versions **v0.x.y** peuvent exister entre les niveaux, auquel cas « x » représente toujours le dernier niveau finalisé et « y » représente la dernière question terminée dans le niveau suivant. Néamoins, ces versions sont susceptibles de contenir des bugs ou **anomalies**. Il est donc préférable de les manipuler avec **précaution** et de se référer aux **v0.x pour des versions stables**.
 
 ### Journal des versions
-- v0.5 : Niveau 5
+- v0.5 : Niveau 5 finalisé
 - v0.4 : Niveau 4 finalisé (GUI)
 - v0.3 : Niveau 3 finalisé
 - v0.2 : Niveau 2 finalisé
