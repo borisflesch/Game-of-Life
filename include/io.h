@@ -48,6 +48,13 @@
      */
     void efface_grille ();
 
+    /**
+     * Affiche une entrée de texte au bas de l'écran
+     * @param[in] input  Entrée à afficher (saisie au clavier)
+     * @param[in] erreur Erreur à afficher entre parenthèses si nécessaire
+     */
+    void drawTextInput(char *input, char *erreur);
+
 #else
 
     /**

@@ -228,6 +228,53 @@ void affiche_grille (grille g, int tempsEvolution, int comptageCyclique, int vie
 	return;
 }
 
+void drawTextInput(char *input, char *erreur) {
+	cairo_t *cr;
+	cr = cairo_create(sfc);
+
+	char inputLabel[255];
+	if (strcmp(erreur, "") == 0) {
+		sprintf(inputLabel, "Veuillez indiquer le numero de la grille a charger :");
+	} else {
+		sprintf(inputLabel, "Veuillez indiquer le numero de la grille a charger (%s) :", erreur);
+	}
+	
+
+	cairo_text_extents_t extentsInput;
+	cairo_text_extents_t extentsInputLabel;
+
+	cairo_set_source_rgb (cr, 0.19215686274509805, 0.20392156862745098, 0.24705882352941178);
+	cairo_rectangle(cr, 15, 475, SIZEX-15, SIZEY-475);
+	cairo_fill(cr);
+
+	cairo_set_source_rgb(cr, 0.396078431372549, 0.6901960784313725, 0.9294117647058824);
+
+	cairo_select_font_face(cr, "Arial",
+		CAIRO_FONT_SLANT_NORMAL,
+		CAIRO_FONT_WEIGHT_NORMAL);
+
+	cairo_set_font_size(cr, 18);
+
+	cairo_move_to(cr, 20, 490);
+	cairo_show_text(cr, inputLabel);
+
+	cairo_text_extents (cr, inputLabel, &extentsInputLabel);
+
+	cairo_move_to(cr, 23 + extentsInputLabel.width + 2, 490);
+	cairo_show_text(cr, input);
+
+	cairo_text_extents (cr, input, &extentsInput);
+
+	int inputOffset = 23 + extentsInputLabel.width + 5 + extentsInput.width;
+	cairo_move_to(cr, inputOffset, 475);
+	cairo_set_line_width(cr, 1);
+	cairo_line_to(cr, inputOffset, 492);
+	cairo_stroke(cr);
+
+
+	cairo_destroy(cr);  
+}
+
 void efface_grille () {
 	cairo_t *cr;
 	cr = cairo_create(sfc);
@@ -248,6 +295,9 @@ void debut_jeu(grille *g, grille *gc) {
 
 	XEvent e;
 	
+	KeySym key;
+	char inputBuffer[255];
+
 	while(1) {
 		XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
 		
@@ -258,27 +308,58 @@ void debut_jeu(grille *g, grille *gc) {
 				evolue(g,gc,&tempsEvolution,compte_voisins_vivants,vieillissement);
 				refreshGrille = 1;
 			} else if (e.xkey.keycode == 57) { // Touche n
-
+				drawTextInput("", "");
+				int exitGridChange = 0;
 				int erreurInitialisation = 0;
+				FILE * testFile = NULL;
 
-				libere_grille(g);
-				libere_grille(gc);
 				do {
-					char numeroGrille[10];
+					char numeroGrille[10] = "";
 					char fichierGrille[100] = "grilles/grille";
-					printf("Numero de la nouvelle grille a charger : ");
-					scanf("%s", numeroGrille);
-					strcat(fichierGrille, numeroGrille);
-					strcat(fichierGrille, ".txt");
-					erreurInitialisation = init_grille_from_file(fichierGrille, g);
-					if (erreurInitialisation) {
-						printf("Erreur : Le fichier grille \"%s\" est introuvable\n", fichierGrille);
+					
+					while (1) {
+						XNextEvent(cairo_xlib_surface_get_display(sfc), &e);
+						if (e.type == KeyPress && XLookupString(&e.xkey,inputBuffer,255,&key,0)==1) {
+							if (e.xkey.keycode == 36 || e.xkey.keycode == 104) {
+								break;
+							} else if (e.xkey.keycode == 22) { // Effacer
+								numeroGrille[strlen(numeroGrille)-1] = '\0';
+							} else if (e.xkey.keycode == 9) { // Escape
+								exitGridChange = 1;
+								break;
+							} else {
+								strcat(numeroGrille, inputBuffer);
+							}
+							drawTextInput(numeroGrille, "");
+						}
 					}
-				} while (erreurInitialisation);
 
-				tempsEvolution = 1; // Réinitialisation du temps
-				tempsOscillation = -1; // Réinitialisation de l'oscillation
-				alloue_grille (g->nbl, g->nbc, gc);
+					if (!exitGridChange) {
+						strcat(fichierGrille, numeroGrille);
+						strcat(fichierGrille, ".txt");
+						testFile = fopen(fichierGrille, "r");
+						if (testFile != NULL) {
+							libere_grille(g);
+							libere_grille(gc);
+							erreurInitialisation = init_grille_from_file(fichierGrille, g);
+							if (erreurInitialisation) {
+								printf("Erreur : Le fichier grille \"%s\" est introuvable\n", fichierGrille);
+								drawTextInput("", "grille introuvable");
+							}
+							fclose(testFile);
+							testFile = NULL;
+						} else {
+							erreurInitialisation = 1;
+							drawTextInput("", "fichier introuvable");
+						}
+					}
+				} while (erreurInitialisation && !exitGridChange);
+
+				if (!exitGridChange) {
+					tempsEvolution = 1; // Réinitialisation du temps
+					tempsOscillation = -1; // Réinitialisation de l'oscillation
+					alloue_grille (g->nbl, g->nbc, gc);
+				}
 				refreshGrille = 1;
 
 			} else if (e.xkey.keycode == 54) { // Touche c
